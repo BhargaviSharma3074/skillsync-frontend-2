@@ -3,52 +3,54 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-app": {
+    "skillsync-frontend": {
       "projectType": "application",
-      "root": ".",
+      "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@analogjs/platform:vite",
+          "builder": "@angular/build:application",
           "options": {
-            "configFile": "vite.config.ts",
-            "main": "src/main.ts",
-            "outputPath": "dist/client",
-            "tsConfig": "tsconfig.app.json"
+            "outputPath": "dist/skillsync-frontend",
+            "index": "index.html",
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              { "glob": "**/*", "input": "public" }
+            ],
+            "styles": ["src/styles.css"],
+            "scripts": []
           },
-          "defaultConfiguration": "production",
           "configurations": {
-            "development": {
-              "mode": "development"
-            },
             "production": {
-              "sourcemap": false,
-              "mode": "production"
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@analogjs/platform:vite-dev-server",
-          "defaultConfiguration": "development",
-          "options": {
-            "buildTarget": "my-app:build",
-            "port": 5173
-          },
+          "builder": "@angular/build:dev-server",
           "configurations": {
-            "development": {
-              "buildTarget": "my-app:build:development",
-              "hmr": true
-            },
             "production": {
-              "buildTarget": "my-app:build:production"
+              "buildTarget": "skillsync-frontend:build:production"
+            },
+            "development": {
+              "buildTarget": "skillsync-frontend:build:development"
             }
-          }
-        },
-        "test": {
-          "builder": "@analogjs/vitest-angular:test"
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

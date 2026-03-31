@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
     mainFields: ['module'],
   },
   plugins: [
-    analog(),
+    analog({ ssr: false, ssrBuildDir: false } as any),
   ],
   test: {
     globals: true,
