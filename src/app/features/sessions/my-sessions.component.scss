@@ -1,0 +1,204 @@
+:host { display: block; }
+
+.page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header { margin-bottom: 1.5rem; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.9rem; color: #6b7280; margin: 0; }
+
+/* ── Modern Segmented Tabs ───────────────────────── */
+.tabs-container {
+  margin-bottom: 2rem;
+}
+
+.tabs {
+  display: inline-flex;
+  background: #f3f4f6;
+  padding: 4px;
+  border-radius: 10px;
+  gap: 4px;
+}
+
+.tab {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover:not(.tab--active) { color: #374151; background: rgba(0,0,0,0.03); }
+
+  &--active {
+    background: #fff;
+    color: #111827;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+}
+
+/* ── Session Card ─────────────────────────────────── */
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.session-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  gap: 1.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    transform: translateY(-1px);
+  }
+}
+
+/* Left Side: Icon & Text */
+.session-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.session-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f8fafc;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #e2e8f0;
+
+  mat-icon { font-size: 1.5rem; width: 1.5rem; height: 1.5rem; }
+}
+
+.session-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.session-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+
+  mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
+}
+
+.divider { color: #d1d5db; }
+
+/* Right Side: Badges & Actions */
+.session-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+.action-buttons { display: flex; gap: 0.5rem; }
+
+.action-btn {
+  font-size: 0.8rem !important;
+  height: 34px !important;
+  border-radius: 6px !important;
+
+  &--danger { color: #dc2626 !important; border-color: #fca5a5 !important; }
+}
+
+/* ── Badges ──────────────────────────────────────── */
+.badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+
+  &--pending   { background: #fef3c7; color: #b45309; }
+  &--accepted  { background: #d1fae5; color: #047857; }
+  &--completed { background: #dbeafe; color: #1d4ed8; }
+  &--rejected  { background: #fee2e2; color: #b91c1c; }
+  &--cancelled { background: #f3f4f6; color: #4b5563; }
+}
+
+/* ── Empty & Loading States ──────────────────────── */
+.center-spinner {
+  display: flex; justify-content: center; padding: 4rem;
+}
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 5rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
+
+  .empty-icon-wrapper {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #f3f4f6; display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #9ca3af; }
+  }
+
+  p { margin: 0; font-size: 0.95rem; font-weight: 500; }
+}
+
+/* ── Responsive Design (Mobile) ──────────────────── */
+@media (max-width: 768px) {
+  .session-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .session-actions {
+    width: 100%;
+    justify-content: space-between; /* Push badge to left, buttons to right */
+    border-top: 1px solid #f3f4f6;
+    padding-top: 1rem;
+  }
+
+  .tabs {
+    width: 100%;
+    display: flex;
+    overflow-x: auto; /* Scrollable tabs on tiny screens */
+  }
+
+  .tab { flex: 1; text-align: center; white-space: nowrap; }
+}

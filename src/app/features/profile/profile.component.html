@@ -1,0 +1,101 @@
+<div class="page">
+
+  <header class="page-header">
+    <h1 class="page-title">My Profile</h1>
+    <p class="page-sub">Manage your account information and preferences</p>
+  </header>
+
+  <div class="profile-layout">
+
+    <div class="avatar-card">
+      <div class="avatar">{{ userInitials }}</div>
+      <h2 class="avatar-name">{{ user.name || user.username }}</h2>
+      <div class="role-badge">{{ roleLabel }}</div>
+      <p class="join-date">Member since {{ joinedDate }}</p>
+    </div>
+
+    <div class="info-card">
+
+      @if (success()) {
+        <div class="alert-banner banner-success">
+          <mat-icon>check_circle</mat-icon> Profile updated successfully.
+        </div>
+      }
+
+      @if (errorMsg()) {
+        <div class="alert-banner banner-error">
+          <mat-icon>error_outline</mat-icon> {{ errorMsg() }}
+        </div>
+      }
+
+      <div class="card-header">
+        <h3>{{ editing() ? 'Edit Profile' : 'Personal Information' }}</h3>
+        @if (!editing()) {
+          <button mat-stroked-button class="edit-btn" (click)="startEdit()">
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+        }
+      </div>
+
+      @if (!editing()) {
+        <div class="info-grid">
+          <div class="info-row">
+            <span class="info-label">Username</span>
+            <span class="info-value">{{ user.username }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Full Name</span>
+            <span class="info-value">{{ user.name || '—' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email Address</span>
+            <span class="info-value">{{ user.email }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Account Role</span>
+            <span class="info-value capitalize">{{ roleLabel }}</span>
+          </div>
+        </div>
+
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="save()" class="edit-form">
+          
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" placeholder="Choose a unique username" />
+            @if (form.get('username')?.invalid && form.get('username')?.touched) {
+              <mat-error>Minimum 3 characters required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" placeholder="e.g. Jane Doe" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="name@example.com" />
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
+              <mat-error>Please enter a valid email address</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-stroked-button type="button" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" class="submit-btn" [disabled]="saving() || form.invalid">
+              @if (saving()) { 
+                <mat-spinner diameter="20" class="btn-spinner"></mat-spinner> Saving... 
+              } @else { 
+                Save Changes 
+              }
+            </button>
+          </div>
+        </form>
+      }
+
+    </div>
+
+  </div>
+
+</div>

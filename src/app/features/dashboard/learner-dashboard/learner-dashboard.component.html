@@ -1,1 +1,165 @@
-<h1>Learner Dashboard</h1>
+<div class="page">
+
+  <header class="dash-header">
+    <div class="header-left">
+      <h1 class="greeting">{{ greeting }}, {{ firstName() }}! &#x1F44B;</h1>
+      <p class="date-line">{{ today }} — Here's your learning overview</p>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">{{ userInitials() }}</div>
+    </div>
+  </header>
+
+  <section class="stats-row">
+    @for (s of stats(); track s.label) {
+      <mat-card class="stat-card" appearance="outlined">
+        <mat-card-content>
+          <div class="stat-icon-wrap" [style.background]="s.bg">
+            <mat-icon [style.color]="s.color">{{ s.icon }}</mat-icon>
+          </div>
+          <div class="stat-body">
+            @if (loadingSessions()) {
+              <mat-spinner diameter="24"></mat-spinner>
+            } @else {
+              <span class="stat-value">{{ s.value }}</span>
+              <span class="stat-label">{{ s.label }}</span>
+              <span class="stat-sub">{{ s.sub }}</span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+
+  <section class="mentor-promo-banner">
+    <div class="promo-content">
+      <div class="promo-icon-wrapper">
+        <mat-icon>workspace_premium</mat-icon>
+      </div>
+      <div class="promo-text">
+        <h3 class="promo-title">Ready to share your expertise?</h3>
+        <p class="promo-sub">Become a mentor, help peers grow, and earn while you teach.</p>
+      </div>
+    </div>
+    
+<button mat-flat-button color="accent" class="apply-mentor-btn" (click)="openMentorApplication()">
+  Apply to be a Mentor
+</button>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Recommended Mentors</h2>
+
+    @if (loadingMentors()) {
+      <div class="center-spinner"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (mentors().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <mat-icon>group_off</mat-icon>
+        </div>
+        <p>No mentors available at the moment.</p>
+      </div>
+    } @else {
+      <div class="mentors-grid">
+        @for (m of mentors(); track m.id) {
+          <mat-card class="mentor-card" appearance="outlined">
+            
+            <div class="card-top">
+              <div class="mentor-avatar" [style.background]="mentorColor(m)">
+                {{ mentorInitials(m) }}
+              </div>
+              <div class="mentor-info">
+                <div class="mentor-name">Mentor #{{ m.userId }}</div>
+                <div class="mentor-exp">
+                  <mat-icon>work_outline</mat-icon>
+                  {{ m.experience }} yrs experience
+                </div>
+              </div>
+            </div>
+
+            <div class="mentor-rating">
+              <div class="stars-container">
+                @for (filled of stars(m.rating); track $index) {
+                  <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+                }
+              </div>
+              <span class="rating-value">{{ m.rating | number:'1.1-1' }}</span>
+              <span class="rating-reviews">({{ m.reviewCount }} reviews)</span>
+            </div>
+
+            <div class="card-bottom">
+              <div class="skill-chips">
+                @for (skill of m.skills; track skill) {
+                  <span class="chip">{{ skill }}</span>
+                }
+              </div>
+
+              <div class="mentor-footer">
+                <div class="mentor-rate-badge">
+                  &#x20B9;{{ m.hourlyRate | number:'1.0-0' }}<span>/hr</span>
+                </div>
+                <button mat-flat-button 
+                        color="primary"
+                        class="book-btn"
+                        [routerLink]="['/book-session', m.userId]"
+                        >Book Session</button>
+              </div>
+            </div>
+
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Upcoming Sessions</h2>
+
+    @if (loadingSessions()) {
+      <div class="center-spinner"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (upcomingSessions().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <mat-icon>event_busy</mat-icon>
+        </div>
+        <p>No upcoming sessions. Book a session with a mentor!</p>
+      </div>
+    } @else {
+      <mat-card appearance="outlined" class="table-card">
+        <div class="table-responsive">
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>Date &amp; Time</th>
+                <th>Mentor ID</th>
+                <th>Topic</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of upcomingSessions(); track s.id) {
+                <tr>
+                  <td>
+                    <div class="date-cell">
+                      <mat-icon class="cal-icon">calendar_today</mat-icon>
+                      {{ formatDate(s.sessionDate) }}
+                    </div>
+                  </td>
+                  <td class="mentor-name-cell">Mentor #{{ s.mentorId }}</td>
+                  <td class="topic-cell">{{ s.topic || '—' }}</td>
+                  <td>
+                    <span class="status-badge"
+                      [class.status-badge--accepted]="s.status === 'ACCEPTED'"
+                      [class.status-badge--pending]="s.status === 'REQUESTED'"
+                    >{{ s.status }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    }
+  </section>
+
+</div>

@@ -1,0 +1,194 @@
+<div class="page">
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="admin-badge">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Console
+      </div>
+      <h1 class="page-title">Platform Analytics</h1>
+      <p class="page-sub">Key metrics and platform health overview</p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+
+    <!-- KPI Cards -->
+    <section class="stats-row">
+      @for (k of kpis(); track k.label) {
+        <mat-card class="stat-card" appearance="outlined">
+          <mat-card-content>
+            <div class="stat-icon-wrap" [style.background]="k.bg">
+              <mat-icon [style.color]="k.color">{{ k.icon }}</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value">{{ k.value }}</span>
+              <span class="stat-label">{{ k.label }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+
+    <div class="two-col">
+
+      <!-- User Role Breakdown -->
+      <section class="section">
+        <h2 class="section-title">User Role Breakdown</h2>
+        <mat-card appearance="outlined" class="chart-card">
+
+          <div class="donut-wrap">
+            <div class="donut-legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#4285f4"></div>
+                <span class="legend-label">Learners</span>
+                <span class="legend-count">{{ learnerCount() }}</span>
+                <span class="legend-pct">
+                  {{ totalUsers() ? ((learnerCount() / totalUsers()) * 100 | number:'1.0-0') + '%' : '—' }}
+                </span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#34a853"></div>
+                <span class="legend-label">Mentors</span>
+                <span class="legend-count">{{ mentorCount() }}</span>
+                <span class="legend-pct">
+                  {{ totalUsers() ? ((mentorCount() / totalUsers()) * 100 | number:'1.0-0') + '%' : '—' }}
+                </span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#dd0031"></div>
+                <span class="legend-label">Admins</span>
+                <span class="legend-count">{{ adminCount() }}</span>
+                <span class="legend-pct">
+                  {{ totalUsers() ? ((adminCount() / totalUsers()) * 100 | number:'1.0-0') + '%' : '—' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="bar-chart-vertical">
+              <div class="v-bar-col">
+                <div class="v-bar" style="background:#4285f4"
+                  [style.height.%]="totalUsers() ? (learnerCount() / totalUsers()) * 100 : 0"></div>
+                <span class="v-bar-label">Learners</span>
+              </div>
+              <div class="v-bar-col">
+                <div class="v-bar" style="background:#34a853"
+                  [style.height.%]="totalUsers() ? (mentorCount() / totalUsers()) * 100 : 0"></div>
+                <span class="v-bar-label">Mentors</span>
+              </div>
+              <div class="v-bar-col">
+                <div class="v-bar" style="background:#dd0031"
+                  [style.height.%]="totalUsers() ? (adminCount() / totalUsers()) * 100 : 0"></div>
+                <span class="v-bar-label">Admins</span>
+              </div>
+            </div>
+          </div>
+
+        </mat-card>
+      </section>
+
+      <!-- Registration Trend -->
+      <section class="section">
+        <h2 class="section-title">Registration Trend</h2>
+        <mat-card appearance="outlined" class="chart-card">
+          @if (registrationByMonth().length === 0) {
+            <div class="no-data">No registration data available.</div>
+          } @else {
+            <div class="bar-chart">
+              @for (entry of registrationByMonth(); track entry.label) {
+                <div class="bar-item">
+                  <span class="bar-count">{{ entry.count }}</span>
+                  <div class="bar-fill-wrap">
+                    <div class="bar-fill" [style.height.%]="entry.pct"></div>
+                  </div>
+                  <span class="bar-label">{{ entry.label }}</span>
+                </div>
+              }
+            </div>
+          }
+        </mat-card>
+      </section>
+
+    </div>
+
+    <!-- Top Skills -->
+    <section class="section">
+      <h2 class="section-title">Top Mentor Skills</h2>
+      @if (topSkills().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon-wrapper"><mat-icon>code_off</mat-icon></div>
+          <p>No skill data available.</p>
+        </div>
+      } @else {
+        <mat-card appearance="outlined" class="skills-card">
+          <div class="skills-grid">
+            @for (skill of topSkills(); track skill.label) {
+              <div class="skill-row">
+                <span class="skill-name">{{ skill.label }}</span>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" [style.width.%]="skill.pct"></div>
+                </div>
+                <span class="skill-count">{{ skill.count }} mentors</span>
+              </div>
+            }
+          </div>
+        </mat-card>
+      }
+    </section>
+
+    <!-- Mentor Status Overview -->
+    <section class="section">
+      <h2 class="section-title">Mentor Status Overview</h2>
+      <div class="status-cards">
+        <mat-card appearance="outlined" class="status-card">
+          <mat-card-content>
+            <div class="stat-icon-wrap" style="background:#e6f4ea">
+              <mat-icon style="color:#34a853">verified</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value">{{ activeMentors() }}</span>
+              <span class="stat-label">Active Mentors</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card appearance="outlined" class="status-card">
+          <mat-card-content>
+            <div class="stat-icon-wrap" style="background:#fff8e1">
+              <mat-icon style="color:#f9a825">pending</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value">{{ pendingMentors() }}</span>
+              <span class="stat-label">Pending Applications</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card appearance="outlined" class="status-card">
+          <mat-card-content>
+            <div class="stat-icon-wrap" style="background:#fff8e1">
+              <mat-icon style="color:#f9a825">star</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value">{{ avgRating() | number:'1.1-1' }}</span>
+              <span class="stat-label">Average Mentor Rating</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card appearance="outlined" class="status-card">
+          <mat-card-content>
+            <div class="stat-icon-wrap" style="background:#e0f7fa">
+              <mat-icon style="color:#0097a7">payments</mat-icon>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value">&#x20B9;{{ avgHourlyRate() | number:'1.0-0' }}</span>
+              <span class="stat-label">Avg. Hourly Rate</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+  }
+
+</div>

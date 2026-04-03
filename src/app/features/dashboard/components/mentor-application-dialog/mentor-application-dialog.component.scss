@@ -1,0 +1,132 @@
+@use '@angular/material' as mat;
+
+/* ── Typography & Header ────────────────────────── */
+.dialog-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 1.75rem 1.75rem 0.5rem;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.dialog-sub {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0 1.75rem 1.5rem;
+  line-height: 1.5;
+}
+
+/* ── Form Layout ────────────────────────────────── */
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0 0.25rem; /* Slight padding to prevent outline clipping */
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* ── Rupee Prefix & Suffix Fix ──────────────────── */
+.rate-field {
+  .prefix-text {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: #334155;
+    padding-right: 4px;
+    margin-top: 2px; /* Micro-adjustment for vertical center */
+  }
+
+  .suffix-text {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    padding-left: 4px;
+    margin-top: 2px;
+  }
+}
+
+/* ── Skills Droplets (Chips) ────────────────────── */
+.skills-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.droplets-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.droplet {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 999px; /* Perfect pill shape */
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  transition: all 0.2s ease;
+
+  .remove-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    cursor: pointer;
+    color: #93c5fd;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #1e3a8a;
+    }
+  }
+}
+
+/* ── Actions & Buttons ──────────────────────────── */
+.dialog-actions {
+  padding: 1.5rem 1.75rem 1.75rem;
+  gap: 1rem;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 1rem;
+}
+
+.cancel-btn, .submit-btn {
+  height: 44px !important;
+  border-radius: 10px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  padding: 0 1.5rem !important;
+  letter-spacing: 0.025em;
+}
+
+.cancel-btn {
+  color: #ef4444 !important; /* Red text for cancel */
+  border-color: #fca5a5 !important;
+}
+
+/* ── Force Material Uniformity ──────────────────── */
+::ng-deep {
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 20px !important;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  }
+
+  /* Make inputs slightly softer grey background like modern forms */
+  .mat-mdc-text-field-wrapper {
+    background-color: #f8fafc !important;
+  }
+
+  /* Fix textarea alignment */
+  textarea.mat-mdc-input-element {
+    margin-top: 4px !important;
+  }
+}

@@ -1,0 +1,60 @@
+<h2 mat-dialog-title class="dialog-title">Apply to be a Mentor</h2>
+
+<mat-dialog-content>
+  <p class="dialog-sub">Tell us a bit about your experience so we can match you with the right learners.</p>
+
+  <form [formGroup]="applicationForm" class="dialog-form">
+
+    <div class="skills-wrapper">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>Select Skills</mat-label>
+        <mat-select formControlName="skills" multiple>
+          <mat-select-trigger>
+            {{ applicationForm.get('skills')?.value?.length ? applicationForm.get('skills')?.value?.length + ' skills selected' : '' }}
+          </mat-select-trigger>
+
+          @for (skill of availableSkills(); track skill.id) {
+            <mat-option [value]="skill.id">{{ skill.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (getSelectedSkills().length > 0) {
+        <div class="droplets-container">
+          @for (skill of getSelectedSkills(); track skill.id) {
+            <div class="droplet">
+              {{ skill.name }}
+              <mat-icon class="remove-icon" (click)="removeSkill(skill.id)">close</mat-icon>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+      <mat-label>Experience (Years)</mat-label>
+      <input matInput type="number" formControlName="experience" placeholder="e.g. 5">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width rate-field" subscriptSizing="dynamic">
+      <mat-label>Hourly Rate</mat-label>
+      <span matPrefix>₹ &nbsp;</span>
+      <input matInput type="number" formControlName="hourlyRate" placeholder="500">
+      <span matSuffix>&nbsp; / hr</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+      <mat-label>Short Bio</mat-label>
+      <textarea matInput formControlName="bio" rows="3" placeholder="Tell learners about your journey..."></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-stroked-button (click)="close()" class="cancel-btn">Cancel</button>
+<button mat-flat-button color="primary" class="submit-btn"
+        [disabled]="applicationForm.invalid || isSubmitting()"
+        (click)="submitApplication()">
+  {{ isSubmitting() ? 'Submitting...' : 'Submit Application' }}
+</button>
+</mat-dialog-actions>

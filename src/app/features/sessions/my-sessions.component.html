@@ -1,0 +1,78 @@
+<div class="page">
+
+  <header class="page-header">
+    <h1 class="page-title">My Sessions</h1>
+    <p class="page-sub">Manage all your learning sessions</p>
+  </header>
+
+  <div class="tabs-container">
+    <div class="tabs">
+      @for (tab of tabs; track tab.key) {
+        <button class="tab" [class.tab--active]="activeTab() === tab.key" (click)="activeTab.set(tab.key)">
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (filtered().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>event_busy</mat-icon>
+      </div>
+      <p>No sessions found for this category.</p>
+    </div>
+  } @else {
+    <div class="sessions-list">
+      @for (s of filtered(); track s.id) {
+        <div class="session-card">
+          
+          <div class="session-info">
+            <div class="session-icon">
+              <mat-icon>{{ isLearner ? 'school' : 'person' }}</mat-icon>
+            </div>
+            
+            <div class="session-text">
+              <h3 class="session-title">{{ s.topic || 'Mentoring Session' }}</h3>
+              
+              <div class="session-meta">
+                <span class="meta-item">
+                  <mat-icon>calendar_today</mat-icon> 
+                  {{ formatDate(s.sessionDate) }}
+                </span>
+                <span class="meta-item divider">•</span>
+                <span class="meta-item">
+                  <mat-icon>badge</mat-icon> 
+                  {{ isLearner ? 'Mentor' : 'Learner' }} #{{ isLearner ? s.mentorId : s.learnerId }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="session-actions">
+            <span class="badge" [ngClass]="statusClass(s.status)">{{ s.status }}</span>
+            
+            <div class="action-buttons">
+              @if (canAccept(s)) {
+                <button mat-flat-button color="primary" class="action-btn" (click)="accept(s.id)">Accept</button>
+              }
+              @if (canComplete(s)) {
+                <button mat-flat-button color="primary" class="action-btn" (click)="complete(s.id)">Complete</button>
+              }
+              @if (canReject(s)) {
+                <button mat-stroked-button class="action-btn action-btn--danger" (click)="reject(s.id)">Reject</button>
+              }
+              @if (canCancel(s)) {
+                <button mat-stroked-button class="action-btn action-btn--danger" (click)="cancel(s.id)">Cancel</button>
+              }
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</div>

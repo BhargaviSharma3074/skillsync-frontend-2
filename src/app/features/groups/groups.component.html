@@ -1,0 +1,114 @@
+<div class="page">
+
+  <header class="page-header">
+    <div class="header-text">
+      <h1 class="page-title">Learning Groups</h1>
+      <p class="page-sub">Join communities, share knowledge, and learn together</p>
+    </div>
+    <button mat-flat-button color="primary" class="create-btn" (click)="showCreate.set(!showCreate())">
+      <mat-icon>{{ showCreate() ? 'close' : 'add' }}</mat-icon> 
+      {{ showCreate() ? 'Cancel' : 'Create Group' }}
+    </button>
+  </header>
+
+  @if (showCreate()) {
+    <div class="create-form-wrapper">
+      <div class="create-form">
+        <div class="form-header">
+          <div class="icon-wrapper"><mat-icon>group_add</mat-icon></div>
+          <h3>Start a New Community</h3>
+        </div>
+        
+        <div class="form-fields">
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Group Name</mat-label>
+            <input matInput [(ngModel)]="newName" placeholder="e.g. Advanced Angular Patterns" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="newDesc" rows="2" placeholder="What is the focus of this group?"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button class="cancel-btn" (click)="showCreate.set(false)">Cancel</button>
+          <button mat-flat-button color="primary" class="submit-btn" [disabled]="creating() || !newName.trim()" (click)="createGroup()">
+            @if (creating()) { 
+              <mat-spinner diameter="20" class="btn-spinner"></mat-spinner> Creating... 
+            } @else { 
+              Create Group 
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+<div class="filters-row">
+    <div class="pill-nav">
+      <button class="pill" [class.active]="activeTab() === 'all'" (click)="setTab('all')">
+        Discover
+      </button>
+      <button class="pill" [class.active]="activeTab() === 'joined'" (click)="setTab('joined')">
+        Joined
+      </button>
+      <button class="pill" [class.active]="activeTab() === 'created'" (click)="setTab('created')">
+        Created by Me
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Search for groups..." [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" />
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (filtered().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <p>No learning groups found.</p>
+    </div>
+  } @else {
+    <div class="groups-grid">
+      @for (g of filtered(); track g.id) {
+        <mat-card class="group-card" appearance="outlined">
+          
+          <div class="card-top">
+            <div class="group-header">
+              <div class="group-avatar" [style.background]="avatarColor(g.id)">
+                {{ groupInitials(g.name) }}
+              </div>
+              <div class="group-title-area">
+                <h3 class="group-name">{{ g.name }}</h3>
+                <span class="group-members">
+                  <mat-icon>people</mat-icon> Community
+                </span>
+              </div>
+            </div>
+            
+            <p class="group-desc">{{ g.description || 'No description provided for this group.' }}</p>
+          </div>
+
+          <div class="card-bottom">
+            @if (isJoined(g.id)) {
+              <button mat-stroked-button class="leave-btn" (click)="leave(g.id)">
+                <mat-icon>logout</mat-icon> Leave Group
+              </button>
+            } @else {
+              <button mat-flat-button color="primary" class="join-btn" (click)="join(g.id)">
+                Join Group
+              </button>
+            }
+          </div>
+
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

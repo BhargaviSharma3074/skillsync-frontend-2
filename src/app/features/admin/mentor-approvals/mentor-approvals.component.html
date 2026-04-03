@@ -1,0 +1,190 @@
+<div class="page">
+
+  <!-- Toast -->
+  @if (toastMsg()) {
+    <div class="toast">
+      <mat-icon>check_circle</mat-icon>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="admin-badge">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Console
+      </div>
+      <h1 class="page-title">Mentor Approvals</h1>
+      <p class="page-sub">Review and manage mentor applications</p>
+    </div>
+    <div class="header-stats">
+      <div class="mini-stat pending-stat">
+        <span class="mini-stat-value">{{ pending().length }}</span>
+        <span class="mini-stat-label">Pending</span>
+      </div>
+      <div class="mini-stat active-stat">
+        <span class="mini-stat-value">{{ active().length }}</span>
+        <span class="mini-stat-label">Active</span>
+      </div>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (error()) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper"><mat-icon>error_outline</mat-icon></div>
+      <p>Failed to load mentor applications.</p>
+    </div>
+  } @else {
+
+    <!-- Pending Section -->
+    <section class="section">
+      <h2 class="section-title">
+        <mat-icon class="section-icon pending-icon">pending</mat-icon>
+        Pending Applications
+        <span class="count-chip pending-chip">{{ pending().length }}</span>
+      </h2>
+
+      @if (pending().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon-wrapper"><mat-icon>check_circle_outline</mat-icon></div>
+          <p>No pending applications. All caught up!</p>
+        </div>
+      } @else {
+        <div class="mentor-grid">
+          @for (m of pending(); track m.id) {
+            <mat-card class="mentor-card" appearance="outlined">
+              <div class="card-header">
+                <div class="mentor-avatar" [style.background]="avatarColor(m.id)">
+                  M{{ m.userId }}
+                </div>
+                <div class="mentor-meta">
+                  <div class="mentor-id">Mentor #{{ m.id }}</div>
+                  <div class="user-ref">User ID: {{ m.userId }}</div>
+                </div>
+                <span class="status-badge"
+                  [style.color]="statusColor(m.status)"
+                  [style.background]="statusBg(m.status)">
+                  {{ m.status }}
+                </span>
+              </div>
+
+              @if (m.bio) {
+                <p class="mentor-bio">{{ m.bio }}</p>
+              }
+
+              <div class="mentor-details">
+                <div class="detail-item">
+                  <mat-icon>work_outline</mat-icon>
+                  <span>{{ m.experience }} yrs experience</span>
+                </div>
+                <div class="detail-item">
+                  <mat-icon>payments</mat-icon>
+                  <span>&#x20B9;{{ m.hourlyRate }}/hr</span>
+                </div>
+              </div>
+
+              @if (m.skills && m.skills.length > 0) {
+                <div class="skill-chips">
+                  @for (skill of m.skills; track skill) {
+                    <span class="chip">{{ skill }}</span>
+                  }
+                </div>
+              }
+
+              <div class="card-actions">
+                <button mat-flat-button class="approve-btn"
+                  [disabled]="actionInProgress() === m.id"
+                  (click)="approve(m)">
+                  @if (actionInProgress() === m.id) {
+                    <mat-spinner diameter="16"></mat-spinner>
+                  } @else {
+                    <ng-container>
+                      <mat-icon>check_circle</mat-icon>
+                      Approve
+                    </ng-container>
+                  }
+                </button>
+                <button mat-stroked-button class="reject-btn"
+                  [disabled]="actionInProgress() === m.id"
+                  (click)="reject(m)">
+                  <mat-icon>cancel</mat-icon>
+                  Reject
+                </button>
+              </div>
+            </mat-card>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Active Mentors Section -->
+    <section class="section">
+      <h2 class="section-title">
+        <mat-icon class="section-icon active-icon">verified</mat-icon>
+        Active Mentors
+        <span class="count-chip active-chip">{{ active().length }}</span>
+      </h2>
+
+      @if (active().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon-wrapper"><mat-icon>psychology</mat-icon></div>
+          <p>No active mentors yet.</p>
+        </div>
+      } @else {
+        <mat-card appearance="outlined" class="table-card">
+          <div class="table-responsive">
+            <table class="mentors-table">
+              <thead>
+                <tr>
+                  <th>Mentor</th>
+                  <th>Experience</th>
+                  <th>Rating</th>
+                  <th>Hourly Rate</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of active(); track m.id) {
+                  <tr>
+                    <td>
+                      <div class="mentor-cell">
+                        <div class="avatar-sm" [style.background]="avatarColor(m.id)">M{{ m.userId }}</div>
+                        <div>
+                          <div class="mentor-name-cell">Mentor #{{ m.id }}</div>
+                          <div class="user-ref-sm">User #{{ m.userId }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ m.experience }} yrs</td>
+                    <td>
+                      <div class="rating-cell">
+                        <div class="stars">
+                          @for (filled of stars(m.rating); track $index) {
+                            <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+                          }
+                        </div>
+                        <span>{{ m.rating | number:'1.1-1' }}</span>
+                      </div>
+                    </td>
+                    <td>&#x20B9;{{ m.hourlyRate }}/hr</td>
+                    <td>
+                      <span class="status-badge"
+                        [style.color]="statusColor(m.status)"
+                        [style.background]="statusBg(m.status)">
+                        {{ m.status }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+      }
+    </section>
+
+  }
+
+</div>

@@ -1,0 +1,103 @@
+<div class="page">
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="admin-badge">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Console
+      </div>
+      <h1 class="page-title">User Management</h1>
+      <p class="page-sub">View and manage all platform users</p>
+    </div>
+    <div class="header-stats">
+      <div class="mini-stat">
+        <span class="mini-stat-value">{{ users().length }}</span>
+        <span class="mini-stat-label">Total Users</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search users...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="role-field">
+      <mat-label>Role</mat-label>
+      <mat-select [ngModel]="roleFilter()" (ngModelChange)="roleFilter.set($event)">
+        <mat-option value="ALL">All Roles</mat-option>
+        <mat-option value="LEARNER">Learner</mat-option>
+        <mat-option value="MENTOR">Mentor</mat-option>
+        <mat-option value="ADMIN">Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <span class="results-count">{{ filteredUsers().length }} result(s)</span>
+  </div>
+
+  <!-- Table -->
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (error()) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper"><mat-icon>error_outline</mat-icon></div>
+      <p>Failed to load users. Check admin permissions.</p>
+    </div>
+  } @else if (filteredUsers().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper"><mat-icon>search_off</mat-icon></div>
+      <p>No users match your search.</p>
+    </div>
+  } @else {
+    <mat-card appearance="outlined" class="table-card">
+      <div class="table-responsive">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Member Since</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of filteredUsers(); track u.id) {
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" [style.background]="avatarColor(u)">
+                      {{ userAvatar(u) }}
+                    </div>
+                    <span class="user-display-name">{{ u.name || u.username }}</span>
+                  </div>
+                </td>
+                <td class="username-cell">@{{ u.username }}</td>
+                <td class="email-cell">{{ u.email }}</td>
+                <td>
+                  <span class="role-badge"
+                    [style.color]="roleColor(u.role)"
+                    [style.background]="roleBg(u.role)">
+                    @if (u.role === 'ADMIN') {
+                      <mat-icon class="role-icon">shield</mat-icon>
+                    } @else if (u.role === 'MENTOR') {
+                      <mat-icon class="role-icon">psychology</mat-icon>
+                    } @else {
+                      <mat-icon class="role-icon">school</mat-icon>
+                    }
+                    {{ u.role }}
+                  </span>
+                </td>
+                <td class="date-cell">{{ formatDate(u.createdAt) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+  }
+
+</div>

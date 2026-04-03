@@ -1,0 +1,166 @@
+@use '@angular/material' as mat;
+
+:host { display: block; }
+.page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header { margin-bottom: 2rem; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.95rem; color: #64748b; margin: 0; }
+
+/* ── Learner View: Session Rows ──────────────────── */
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.session-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover { border-color: #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+
+  &--active { border-color: #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+}
+
+.session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  gap: 1rem;
+}
+
+.session-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.status-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #d1fae5; color: #059669;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { font-size: 1.25rem; width: 1.25rem; height: 1.25rem; }
+}
+
+.s-mentor { font-size: 1.05rem; font-weight: 600; color: #0f172a; }
+.s-date   { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+.dot-divider { margin: 0 4px; color: #cbd5e1; }
+
+.review-btn { height: 36px !important; border-radius: 8px !important; box-shadow: none !important; }
+
+.reviewed-tag {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 0.85rem; color: #059669; font-weight: 600;
+  background: #ecfdf5; padding: 4px 12px; border-radius: 50px;
+  mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
+}
+
+/* ── Learner View: Review Form ───────────────────── */
+.review-form-wrapper {
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.review-form {
+  padding: 1.5rem;
+}
+
+.star-picker {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 1.25rem;
+}
+
+.star-btn {
+  cursor: pointer; font-size: 2rem; width: 2rem; height: 2rem;
+  color: #cbd5e1; transition: color 0.2s;
+
+  &--on { color: #f59e0b; }
+  &:hover { color: #fbbf24; transform: scale(1.1); }
+}
+
+.rating-label { font-size: 0.9rem; font-weight: 500; color: #64748b; margin-left: 0.75rem; }
+
+.full-width { width: 100%; margin-bottom: 0.5rem; }
+.form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; }
+.cancel-btn, .submit-btn { height: 40px !important; border-radius: 8px !important; }
+.btn-spinner { margin-right: 8px; display: inline-block; vertical-align: middle; }
+
+/* ── Mentor View: Reviews Grid ───────────────────── */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 1.5rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05) !important; transform: translateY(-2px); border-color: #cbd5e1 !important; }
+}
+
+.review-top { display: flex; align-items: center; gap: 1rem; }
+
+.reviewer-avatar {
+  width: 44px; height: 44px; border-radius: 12px; /* Squircle */
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.95rem; font-weight: 700; flex-shrink: 0;
+}
+
+.reviewer-info { flex: 1; min-width: 0; }
+.reviewer-name { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 2px;}
+.review-date   { font-size: 0.8rem; color: #64748b; }
+
+.review-stars { display: flex; align-items: center; gap: 2px; }
+
+.star {
+  font-size: 1rem; width: 1rem; height: 1rem; color: #cbd5e1;
+  &--filled { color: #f59e0b; }
+}
+
+.rating-num { font-size: 0.85rem; font-weight: 600; color: #0f172a; margin-left: 6px; }
+
+.review-comment {
+  font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.6; font-style: italic;
+  background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 3px solid #e2e8f0;
+}
+
+.empty-comment { color: #94a3b8; font-style: normal; border-left-color: transparent; background: transparent; padding: 0;}
+
+/* ── Empty & Loading States ──────────────────────── */
+.center-spinner { display: flex; justify-content: center; padding: 4rem; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 5rem 2rem; color: #64748b; text-align: center; gap: 1rem;
+  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+
+  .empty-icon-wrapper {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
+  }
+
+  p { margin: 0; font-size: 0.95rem; font-weight: 500; }
+}

@@ -1,0 +1,222 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block; /* Makes the host element behave like a standard div */
+  width: 100%;
+}
+.welcome-layout {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Navbar ─────────────────────────────────────── */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background: transparent;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    .nav-link {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .signup-btn {
+      border-radius: 99px;
+      padding: 0 1.5rem;
+      font-weight: 700;
+      height: 42px;
+    }
+  }
+}
+
+/* ── Hero Section ───────────────────────────────── */
+.hero-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 1.5rem;
+  background: radial-gradient(circle at top, #ffffff 0%, #f8fafc 100%);
+}
+
+.hero-content {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .badge {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 6px 16px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    border: 1px solid #bfdbfe;
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.1;
+    margin: 0 0 1.5rem;
+    letter-spacing: -1px;
+
+    .highlight {
+      color: #2563eb;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 3rem;
+    max-width: 600px;
+  }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .primary-btn, .secondary-btn {
+    height: 54px;
+    padding: 0 2.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 12px;
+  }
+
+  .secondary-btn {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    background: white;
+
+    &:hover {
+      background: #f1f5f9;
+    }
+  }
+}
+
+/* ── Features Section ───────────────────────────── */
+.features-section {
+  padding: 5rem 5%;
+  background: white;
+  border-top: 1px solid #f1f5f9;
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 4rem;
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  .icon-wrapper {
+    width: 56px;
+    height: 56px;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      font-size: 1.75rem;
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+/* ── Footer ─────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* ── Responsive Adjustments ─────────────────────── */
+@media (max-width: 768px) {
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+
+    .primary-btn, .secondary-btn {
+      width: 100%;
+    }
+  }
+}

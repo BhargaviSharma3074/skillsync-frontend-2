@@ -1,0 +1,217 @@
+@use '@angular/material' as mat;
+
+:host { display: block; }
+
+.page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Header ──────────────────────────────────────── */
+.page-header { margin-bottom: 2rem; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.9rem; color: #6b7280; margin: 0; }
+
+/* ── Filters ─────────────────────────────────────── */
+.filters-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: #fff;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.search-field {
+  flex: 1;
+  min-width: 250px;
+
+  @include mat.form-field-overrides((
+    outlined-container-shape: 10px
+  ));
+}
+
+.filter-btn {
+  height: 56px !important;
+  border-radius: 10px !important;
+  font-size: 0.9rem !important;
+  padding: 0 1.5rem !important;
+  box-shadow: none !important;
+
+  mat-icon { margin-right: 4px; }
+}
+
+/* ── Mentor Grid ─────────────────────────────────── */
+.mentors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.mentor-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensures cards in the same row are equal height */
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+  }
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px; /* Slightly squircle instead of pure circle for modern look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mentor-info {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.mentor-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.2rem;
+}
+
+.mentor-exp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+
+  mat-icon { font-size: 0.9rem; width: 0.9rem; height: 0.9rem; }
+}
+
+.mentor-rate-badge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+
+  span { font-size: 0.7rem; font-weight: 500; color: #64748b; margin-left: 2px;}
+}
+
+/* ── Middle: Rating & Bio ────────────────────────── */
+.mentor-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stars-container {
+  display: flex;
+  gap: 2px;
+  margin-right: 8px;
+}
+
+.star {
+  font-size: 1rem; width: 1rem; height: 1rem;
+  color: #cbd5e1;
+  &--filled { color: #f59e0b; }
+}
+
+.rating-val { font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-right: 4px; }
+.rating-count { font-size: 0.8rem; color: #64748b; }
+
+.mentor-bio {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Bottom: Skills & Button ─────────────────────── */
+.card-bottom {
+  margin-top: auto; /* Pushes the bottom section down so buttons align */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+.book-btn {
+  width: 100%;
+  height: 42px !important;
+  font-size: 0.9rem !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+/* ── Empty & Error States ────────────────────────── */
+.center-spinner {
+  display: flex; justify-content: center; padding: 4rem;
+}
+
+.empty-state, .error-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 5rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
+
+  .empty-icon-wrapper {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #f3f4f6; display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #9ca3af; }
+  }
+
+  p { margin: 0; font-size: 0.95rem; font-weight: 500; }
+}
+
+.error-state {
+  color: #dc2626;
+  mat-icon { font-size: 3rem; width: 3rem; height: 3rem; }
+}

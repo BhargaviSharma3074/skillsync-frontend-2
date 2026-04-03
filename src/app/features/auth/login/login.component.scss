@@ -1,0 +1,250 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  height: 100vh;
+}
+
+/* ── Layout ──────────────────────────────────────────── */
+.auth-container {
+  display: flex;
+  height: 100%;
+}
+
+/* ── Brand Panel ─────────────────────────────────────── */
+.brand-panel {
+  width: 45%; /* Slightly wider for better balance on large screens */
+  background:
+    radial-gradient(ellipse at 10% 90%, rgba(221, 0, 49, 0.4) 0%, transparent 50%),
+    linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+}
+
+.brand-content {
+  max-width: 400px;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-logo {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.5px;
+}
+
+.logo-skill { color: #ffffff; }
+.logo-sync  { color: #f59e0b; }
+
+.brand-tagline {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0 0 3rem;
+  letter-spacing: 0.2px;
+}
+
+/* ── Feature List ────────────────────────────────────── */
+.brand-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: 0.95rem;
+    color: #f8fafc;
+    font-weight: 500;
+  }
+}
+
+.feat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px; /* Unified Squircle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+  mat-icon { font-size: 1.25rem; width: 1.25rem; height: 1.25rem; color: #fff; }
+
+  &--red    { background: #ef4444; }
+  &--blue   { background: #3b82f6; }
+  &--indigo { background: #6366f1; }
+  &--gold   { background: #f59e0b; }
+}
+
+/* ── Form Panel ──────────────────────────────────────── */
+.form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 2rem;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.form-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.5px;
+}
+
+.form-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 2rem;
+}
+
+/* ── Field Groups ────────────────────────────────────── */
+.field-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.4rem;
+}
+
+.full-width {
+  width: 100%;
+
+  @include mat.form-field-overrides((
+    outlined-container-shape: 10px
+  ));
+}
+
+/* ── Remember row ────────────────────────────────────── */
+.remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.remember-check {
+  font-size: 0.85rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.forgot-link {
+  font-size: 0.85rem;
+  color: #dd0031;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Error banner ────────────────────────────────────── */
+.api-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  color: #b91c1c;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+
+  mat-icon { font-size: 1.25rem; width: 1.25rem; height: 1.25rem; }
+}
+
+/* ── Submit button ───────────────────────────────────── */
+.submit-btn {
+  width: 100%;
+  height: 48px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+
+  .btn-spinner { margin-right: 8px; display: inline-block; vertical-align: middle; }
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.75rem 0 1.5rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+  }
+}
+
+/* ── Social buttons ──────────────────────────────────── */
+.social-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-btn {
+  flex: 1;
+  height: 44px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+  transition: all 0.2s ease;
+
+  svg { margin-right: 8px; }
+
+  &:hover { background: #f8fafc; border-color: #94a3b8 !important; }
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.form-footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.footer-link {
+  color: #dd0031;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}

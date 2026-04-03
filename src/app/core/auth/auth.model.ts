@@ -1,24 +1,27 @@
-export interface User{
+export interface UserDTO {
   id: number;
+  username: string;
   name: string;
   email: string;
-  role: "LEARNER" | "MENTOR" | "ADMIN"
-  avatarUrl?: string;
+  role: 'LEARNER' | 'MENTOR' | 'ADMIN';
+  createdAt: string;
 }
 
-export interface LoginRequest{
+// Keep User as alias for compatibility across the app
+export type User = UserDTO;
+
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface RegisterRequest{
-  name: string;
+export interface RegisterRequest {
+  username: string;
   email: string;
   password: string;
 }
 
-export interface AuthResponse{
+// Backend only returns the JWT token on login/register
+export interface AuthResponse {
   token: string;
-  user: User;
 }
-

@@ -1,0 +1,154 @@
+@use '@angular/material' as mat;
+
+:host { display: block; }
+.page {
+  padding: 2rem;
+  max-width: 800px; /* Kept narrower for optimal reading length */
+  margin: 0 auto;
+}
+
+/* ── Header ──────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title { font-size: 1.75rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.95rem; color: #64748b; margin: 0; }
+
+.unread-count {
+  font-weight: 600;
+  color: #dd0031; /* Brand highlight color */
+}
+
+.mark-all-btn {
+  height: 38px !important;
+  border-radius: 8px !important;
+  font-size: 0.85rem !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+
+  mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; margin-right: 4px; color: #64748b; }
+  &:hover { background: #f8fafc; color: #0f172a !important; }
+}
+
+/* ── Notification List ───────────────────────────── */
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle slide up and shadow on hover */
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+  }
+
+  /* Unread State Styling */
+  &--unread {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+
+    .notif-message {
+      font-weight: 600;
+      color: #0f172a;
+    }
+  }
+}
+
+/* ── Icons & Content ─────────────────────────────── */
+.notif-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px; /* Squircle */
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+
+  mat-icon { font-size: 1.4rem; width: 1.4rem; height: 1.4rem; }
+
+  &--unread {
+    background: #e0e7ff; /* Soft indigo background */
+    color: #4f46e5;      /* Deep indigo icon */
+  }
+}
+
+.notif-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 2px;
+}
+
+.notif-message {
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.notif-time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* ── Unread Indicator Dot ────────────────────────── */
+.unread-indicator {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-top: 10px;
+}
+
+.unread-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444; /* Bright red dot */
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+/* ── States ──────────────────────────────────────── */
+.center-spinner {
+  display: flex; justify-content: center; padding: 4rem;
+}
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 5rem 2rem; color: #64748b; text-align: center; gap: 1rem;
+  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+
+  .empty-icon-wrapper {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
+  }
+
+  p { margin: 0; font-size: 0.95rem; font-weight: 500; }
+}

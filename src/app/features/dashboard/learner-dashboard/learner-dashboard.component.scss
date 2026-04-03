@@ -1,0 +1,293 @@
+:host { display: block; }
+
+.page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Header ──────────────────────────────────────── */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.greeting {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem;
+}
+
+.date-line {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #dd0031;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(221, 0, 49, 0.25);
+}
+
+/* ── Stat Cards ───────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem; /* Adjusted to sit right above the banner */
+}
+
+.stat-card {
+  border-radius: 16px !important;
+  background: #fff !important;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+
+  &:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); transform: translateY(-2px); border-color: #cbd5e1; }
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem !important;
+  }
+}
+
+.stat-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 1.75rem; width: 1.75rem; height: 1.75rem; }
+}
+
+.stat-body { display: flex; flex-direction: column; min-width: 0; }
+
+.stat-value { font-size: 1.75rem; font-weight: 800; color: #0f172a; line-height: 1.1; }
+.stat-label { font-size: 0.85rem; font-weight: 500; color: #64748b; margin-top: 0.25rem; }
+.stat-sub   { font-size: 0.75rem; color: #10b981; font-weight: 600; margin-top: 0.1rem; }
+
+/* ── Mentor Promo Banner ─────────────────────────── */
+.mentor-promo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+  flex-wrap: wrap;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+}
+
+.promo-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.promo-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+
+  mat-icon { font-size: 1.75rem; width: 1.75rem; height: 1.75rem; }
+}
+
+.promo-title {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.promo-sub {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.apply-mentor-btn {
+  background: #f59e0b !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  padding: 0 1.5rem !important;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+
+/* ── Sections ────────────────────────────────────── */
+.section { margin-bottom: 3rem; }
+.section-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 1.25rem; }
+
+/* ── Mentor Grid ─────────────────────────────────── */
+.mentors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.mentor-card {
+  border-radius: 16px !important;
+  background: #fff !important;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+
+  &:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); transform: translateY(-2px); border-color: #cbd5e1; }
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mentor-info { flex: 1; min-width: 0; padding-top: 2px; }
+.mentor-name { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.2rem; }
+
+.mentor-exp {
+  display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: #64748b; font-weight: 500;
+  mat-icon { font-size: 0.9rem; width: 0.9rem; height: 0.9rem; }
+}
+
+/* Stars */
+.mentor-rating { display: flex; align-items: center; margin-bottom: 1.5rem; }
+.stars-container { display: flex; gap: 2px; margin-right: 8px; }
+.star { font-size: 1rem; width: 1rem; height: 1rem; color: #cbd5e1; &--filled { color: #f59e0b; } }
+.rating-value { font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-right: 4px; }
+.rating-reviews { font-size: 0.8rem; color: #64748b; }
+
+/* Card Bottom (Auto-Align) */
+.card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.skill-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip { background: #f1f5f9; color: #334155; font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 6px; }
+
+.mentor-footer { display: flex; align-items: center; justify-content: space-between; }
+
+.mentor-rate-badge {
+  background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 10px; border-radius: 8px;
+  font-size: 0.9rem; font-weight: 700; color: #0f172a; white-space: nowrap;
+  span { font-size: 0.7rem; font-weight: 500; color: #64748b; margin-left: 2px;}
+}
+
+.book-btn { height: 38px !important; border-radius: 8px !important; font-size: 0.85rem !important; box-shadow: none !important; }
+
+/* ── Sessions Table ──────────────────────────────── */
+.table-card { border-radius: 16px !important; border: 1px solid #e2e8f0; box-shadow: none !important; }
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+
+  th {
+    background: #f8fafc;
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #64748b; padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e2e8f0;
+  }
+
+  td {
+    font-size: 0.875rem; color: #334155; padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle; display: table-cell;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+}
+
+.date-cell { display: flex; align-items: center; font-weight: 500; }
+.cal-icon { font-size: 1rem; width: 1rem; height: 1rem; color: #dd0031; margin-right: 0.4rem; }
+.mentor-name-cell { font-weight: 600; color: #0f172a; }
+.topic-cell { color: #64748b; }
+
+/* ── Status badges ───────────────────────────────── */
+.status-badge {
+  display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 600; text-transform: capitalize;
+
+  &--accepted { background: #d1fae5; color: #047857; }
+  &--pending { background: #fef3c7; color: #b45309; }
+}
+
+/* ── Shared States ───────────────────────────────── */
+.center-spinner { display: flex; justify-content: center; padding: 4rem; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
+  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+
+  .empty-icon-wrapper {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
+  }
+
+  p { margin: 0; font-size: 0.95rem; font-weight: 500; }
+}

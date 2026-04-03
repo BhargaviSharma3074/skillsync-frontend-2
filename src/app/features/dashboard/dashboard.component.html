@@ -1,0 +1,69 @@
+<div class="dashboard-layout">
+
+  <aside class="sidebar-wrap">
+    <app-sidebar [activePage]="activePage" (navigate)="activePage = $event" />
+  </aside>
+
+  <main class="main-content">
+    @if (authService.currentUser$ | async; as user) {
+      @switch (activePage) {
+
+        @case ('overview') {
+          @if (isAdmin)   { <app-admin-overview /> }
+          @else if (isLearner) { <app-learner-dashboard /> }
+          @else if (isMentor)  { <app-mentor-dashboard /> }
+        }
+
+        @case ('admin-users') {
+          <app-user-management />
+        }
+
+        @case ('admin-approvals') {
+          <app-mentor-approvals />
+        }
+
+        @case ('skill-catalog'){
+            <app-manage-skills />
+        }
+
+        @case ('admin-analytics') {
+          <app-platform-analytics />
+        }
+
+        @case ('find-mentors') {
+            @if(isLearner) { <app-find-mentors /> }
+        }
+
+        @case ('sessions') {
+          <app-my-sessions />
+        }
+
+        @case ('groups') {
+          <app-groups />
+        }
+
+        @case ('reviews') {
+          <app-reviews />
+        }
+
+        @case ('profile') {
+          <app-profile />
+        }
+
+        @case ('notifications') {
+          <app-notifications />
+        }
+
+        @default {
+          <div class="coming-soon">
+            <mat-icon style="font-size:3rem;width:3rem;height:3rem">construction</mat-icon>
+            <h2>Coming Soon</h2>
+            <p>This feature is under development.</p>
+          </div>
+        }
+
+      }
+    }
+  </main>
+
+</div>

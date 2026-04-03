@@ -1,0 +1,109 @@
+<div class="booking-page">
+  <nav class="top-nav">
+    <div class="logo">Skill<span>Sync</span></div>
+    <a routerLink="/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon> Back to Mentors
+    </a>
+  </nav>
+
+  <div class="container">
+    @if (mentor(); as m) {
+      <header class="header">
+        <h1>Book a Session</h1>
+        <p>Schedule a 1-on-1 session with Mentor #{{ m.userId }}</p>
+      </header>
+
+      <div class="stepper-wrapper">
+        <div class="step active"><span class="step-num">✓</span><span class="step-label">Select Date</span></div>
+        <div class="step-line active"></div>
+        <div class="step active-current"><span class="step-num">2</span><span class="step-label">Choose Slot</span></div>
+        <div class="step-line"></div>
+        <div class="step"><span class="step-num">3</span><span class="step-label">Pay</span></div>
+      </div>
+
+      <div class="booking-grid">
+        <div class="selection-area">
+          <mat-card class="main-card" appearance="outlined">
+
+            <section class="calendar-section">
+              <h3 class="section-title"><mat-icon>calendar_today</mat-icon> Select Date</h3>
+              <div class="calendar-wrapper">
+                <mat-calendar
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [selected]="selectedDate()"
+                  (selectedChange)="selectedDate.set($event)">
+                </mat-calendar>
+              </div>
+              <p class="date-hint">* Available up to 30 days in advance</p>
+            </section>
+
+            <section class="slots-section">
+              <h4 class="sub-title">Available slots on {{ formatDate(selectedDate()) }}</h4>
+              <div class="chip-group">
+                @for (slot of availableTimeSlots(); track slot) {
+                  <button class="chip" [class.chip--selected]="selectedTime() === slot" (click)="selectedTime.set(slot)">
+                    {{ slot }}
+                  </button>
+                } @empty {
+                  <p class="no-slots">No slots available for this day.</p>
+                }
+              </div>
+            </section>
+
+            <section class="duration-section">
+              <h4 class="sub-title">Session Duration</h4>
+              <div class="chip-group">
+                @for (d of durations; track d) {
+                  <button class="chip" [class.chip--selected]="selectedDuration() === d" (click)="selectedDuration.set(d)">
+                    {{ d }} min
+                  </button>
+                }
+              </div>
+            </section>
+
+            <section class="topic-section">
+              <h4 class="sub-title">Session Topic</h4>
+              <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+                <input matInput [value]="sessionTopic()" (input)="sessionTopic.set($any($event.target).value)" placeholder="e.g. Code Review or Project Help">
+              </mat-form-field>
+            </section>
+          </mat-card>
+        </div>
+
+        <aside class="summary-area">
+          <mat-card class="summary-card" appearance="outlined">
+            <h3 class="summary-title">Summary</h3>
+            <div class="mentor-brief">
+              <div class="avatar" [style.background]="mentorColor(m)">{{ mentorInitials(m) }}</div>
+              <div class="m-info">
+                <span class="m-name">Mentor #{{ m.userId }}</span>
+                <div class="m-rating">
+                  @for (f of stars(m.rating); track $index) { <mat-icon class="star" [class.star--filled]="f">star</mat-icon> }
+                  <span>{{ m.rating }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-details">
+              <div class="detail-row"><span>Date</span><strong>{{ formatDate(selectedDate()) }}</strong></div>
+              <div class="detail-row"><span>Time</span><strong>{{ selectedTime() || 'Required' }}</strong></div>
+              <div class="detail-row"><span>Duration</span><strong>{{ selectedDuration() }} min</strong></div>
+              <div class="detail-row"><span>Rate</span><strong>₹{{ m.hourlyRate }}/hr</strong></div>
+              <hr class="divider">
+              <div class="detail-row total"><span>Total</span><strong>₹{{ totalPrice() | number:'1.0-0' }}</strong></div>
+            </div>
+
+            <button mat-flat-button color="primary" class="pay-btn"
+                    [disabled]="!selectedTime() || isProcessing()" (click)="onProceedToPay()">
+              @if (isProcessing()) { <mat-spinner diameter="20" color="accent"></mat-spinner> }
+              @else { PROCEED TO PAY &rarr; }
+            </button>
+          </mat-card>
+        </aside>
+      </div>
+    } @else {
+      <div class="loading-state"><mat-spinner diameter="50"></mat-spinner><p>Fetching mentor details...</p></div>
+    }
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Find Mentors</h1>
+      <p class="page-sub">Browse and connect with expert mentors matched to your goals</p>
+    </div>
+  </header>
+
+  <div class="filters-bar">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        type="search"
+        matInput
+        placeholder="Search by skill or bio..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      >
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="filter-btn" (click)="clearFilters()">
+      <mat-icon>filter_list</mat-icon> Filter
+    </button>
+
+    </div>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (apiError()) {
+    <div class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ apiError() }}</p>
+    </div>
+  } @else if (filteredMentors().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>search_off</mat-icon>
+      </div>
+      <p>No mentors found matching your criteria.</p>
+    </div>
+  } @else {
+    <div class="mentors-grid">
+      @for (m of filteredMentors(); track m.id) {
+        <mat-card class="mentor-card" appearance="outlined">
+
+          <div class="card-top">
+            <div class="mentor-avatar" [style.background]="avatarColor(m)">
+              {{ mentorInitials(m) }}
+            </div>
+
+            <div class="mentor-info">
+              <div class="mentor-name">Mentor #{{ m.userId }}</div>
+              <div class="mentor-exp">
+                <mat-icon>work_outline</mat-icon>
+                {{ m.experience }} yrs experience
+              </div>
+            </div>
+
+            <div class="mentor-rate-badge">
+              &#x20B9;{{ m.hourlyRate | number:'1.0-0' }}<span>/hr</span>
+            </div>
+          </div>
+
+          <div class="mentor-rating">
+            <div class="stars-container">
+              @for (filled of stars(m.rating); track $index) {
+                <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+              }
+            </div>
+            <span class="rating-val">{{ m.rating | number:'1.1-1' }}</span>
+            <span class="rating-count">({{ m.reviewCount }} reviews)</span>
+          </div>
+
+          <p class="mentor-bio">{{ m.bio || 'No bio available for this mentor.' }}</p>
+
+          <div class="card-bottom">
+            <div class="skill-chips">
+              @for (skill of m.skills; track skill) {
+                <span class="chip">{{ skill }}</span>
+              }
+            </div>
+
+            <button mat-flat-button color="primary" class="book-btn">Book Session</button>
+          </div>
+
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>
+
+

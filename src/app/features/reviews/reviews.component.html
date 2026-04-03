@@ -1,0 +1,134 @@
+<div class="page">
+
+  <header class="page-header">
+    <h1 class="page-title">Reviews</h1>
+    <p class="page-sub">{{ isLearner ? 'Rate your mentors after completed sessions' : 'See what learners say about your mentoring' }}</p>
+  </header>
+
+  @if (loading()) {
+    <div class="center-spinner"><mat-spinner diameter="40"></mat-spinner></div>
+
+  } @else if (isLearner) {
+
+    @if (completedSessions().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <mat-icon>rate_review</mat-icon>
+        </div>
+        <p>Complete a session with a mentor to leave a review.</p>
+      </div>
+    } @else {
+      <div class="sessions-list">
+        @for (s of completedSessions(); track s.id) {
+          
+          <div class="session-card" [class.session-card--active]="reviewingSession()?.id === s.id">
+            <div class="session-row">
+              <div class="session-info">
+                <div class="status-icon">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+                <div>
+                  <div class="s-mentor">Mentor #{{ s.mentorId }}</div>
+                  <div class="s-date">{{ formatDate(s.sessionDate) }} <span class="dot-divider">•</span> {{ s.topic || 'Session' }}</div>
+                </div>
+              </div>
+              
+              <div class="session-actions">
+                @if (alreadyReviewed(s)) {
+                  <span class="reviewed-tag">
+                    <mat-icon>verified</mat-icon> Reviewed
+                  </span>
+                } @else {
+                  <button mat-flat-button color="primary" class="review-btn" (click)="startReview(s)">
+                    Leave Review
+                  </button>
+                }
+              </div>
+            </div>
+
+            @if (reviewingSession()?.id === s.id) {
+              <div class="review-form-wrapper">
+                <div class="review-form">
+                  <div class="star-picker">
+                    @for (i of [1,2,3,4,5]; track i) {
+                      <mat-icon class="star-btn" [class.star-btn--on]="i <= reviewRating()" (click)="setRating(i)">
+                        {{ i <= reviewRating() ? 'star' : 'star_border' }}
+                      </mat-icon>
+                    }
+                    <span class="rating-label">{{ reviewRating() }}/5 Rating</span>
+                  </div>
+                  
+                  <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+                    <mat-label>Your comment (optional)</mat-label>
+                    <textarea matInput rows="3" [(ngModel)]="reviewComment" placeholder="How did this mentor help you?"></textarea>
+                  </mat-form-field>
+                  
+                  <div class="form-actions">
+                    <button mat-stroked-button class="cancel-btn" (click)="cancelReview()">Cancel</button>
+                    <button mat-flat-button color="primary" class="submit-btn" [disabled]="submitting()" (click)="submitReview()">
+                      @if (submitting()) { 
+                        <mat-spinner diameter="20" class="btn-spinner"></mat-spinner> Submitting... 
+                      } @else { 
+                        Submit Review 
+                      }
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+  } @else {
+
+    @if (!mentorProfile()) {
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <mat-icon>person_add_disabled</mat-icon>
+        </div>
+        <p>You don't have an active mentor profile yet.</p>
+      </div>
+    } @else if (reviews().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <mat-icon>rate_review</mat-icon>
+        </div>
+        <p>No reviews yet. Complete sessions to receive feedback.</p>
+      </div>
+    } @else {
+      <div class="reviews-grid">
+        @for (r of reviews(); track r.id) {
+          <mat-card class="review-card" appearance="outlined">
+            
+            <div class="review-top">
+              <div class="reviewer-avatar" [style.background]="learnerColor(r.userId)">
+                {{ learnerInitials(r.userId) }}
+              </div>
+              <div class="reviewer-info">
+                <div class="reviewer-name">Learner #{{ r.userId }}</div>
+                <div class="review-date">{{ formatDate(r.createdAt) }}</div>
+              </div>
+            </div>
+            
+            <div class="review-stars">
+              @for (filled of stars(r.rating); track $index) {
+                <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+              }
+              <span class="rating-num">{{ r.rating }}/5</span>
+            </div>
+            
+            @if (r.comment) {
+              <p class="review-comment">"{{ r.comment }}"</p>
+            } @else {
+              <p class="review-comment empty-comment">No comment left.</p>
+            }
+
+          </mat-card>
+        }
+      </div>
+    }
+  }
+
+</div>

@@ -1,0 +1,93 @@
+;<div class="page">
+  <header class="page-header">
+    <div class="header-left">
+      <div class="admin-badge">
+        <mat-icon>security</mat-icon> Admin Console
+      </div>
+      <h1 class="page-title">Skill Management</h1>
+      <p class="page-sub">Configure and organize technical categories for the platform</p>
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+      <div class="mini-stat">
+        <span class="mini-stat-value">{{ categoriesCount() }}</span>
+        <span class="mini-stat-label">Categories</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-value">{{ totalSkills() }}</span>
+        <span class="mini-stat-label">Total Skills</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="filters-bar" style="background: #fff; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-label>Skill Name</mat-label>
+      <input matInput [(ngModel)]="newSkill.name" placeholder="e.g. Docker">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="role-field" subscriptSizing="dynamic">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="newSkill.category">
+        @for (cat of categories; track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary"
+            style="height: 48px; border-radius: 8px; font-weight: 700; padding: 0 1.5rem;"
+            (click)="onAddSkill()"
+            [disabled]="!newSkill.name || !newSkill.category">
+      <mat-icon>add</mat-icon> Add Skill
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <div class="table-responsive">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>Category</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of skills(); track s.id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="user-avatar" style="background: #eff6ff; color: #3b82f6;">#</div>
+                  <div>
+                    <div class="user-display-name">{{ s.name }}</div>
+                    <div class="username-cell">ID: {{ s.id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="role-badge" style="background: #f1f5f9; color: #475569;">
+                  {{ s.category }}
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <button mat-icon-button color="warn" (click)="onDelete(s.id)">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (skills().length === 0) {
+        <div class="empty-state" style="border: none; margin: 0; padding: 4rem;">
+          <div class="empty-icon-wrapper">
+            <mat-icon>extension_off</mat-icon>
+          </div>
+          <p>No skills found. Start adding them above!</p>
+        </div>
+      }
+    </div>
+  </mat-card>
+</div>

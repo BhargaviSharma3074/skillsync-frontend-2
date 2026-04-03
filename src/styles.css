@@ -1,4 +1,22 @@
+@import '@angular/material/prebuilt-themes/rose-red.css';
+
+:root {
+  --mat-sys-primary: #DD0031;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #ffd9dc;
+  --mat-sys-on-primary-container: #400010;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
-  display: block;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f5f5f5;
 }

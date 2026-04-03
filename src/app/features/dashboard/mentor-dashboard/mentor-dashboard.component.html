@@ -1,0 +1,122 @@
+<div class="mentor-dashboard">
+
+  <!-- ── Top Header ──────────────────────────────── -->
+  <header class="dash-header">
+    <div class="header-left">
+      <h1 class="greeting">{{ greeting }}, {{ firstName() }}! &#x1F44B;</h1>
+      <p class="date-line">{{ today }} — Here's your mentoring overview</p>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">{{ userInitials() }}</div>
+    </div>
+  </header>
+
+  <!-- ── Stat Cards ───────────────────────────────── -->
+  <section class="stats-row">
+    @for (s of stats(); track s.label) {
+      <mat-card class="stat-card" appearance="outlined">
+        <mat-card-content>
+          <div class="stat-icon-wrap" [style.background]="s.bg">
+            <mat-icon [style.color]="s.color">{{ s.icon }}</mat-icon>
+          </div>
+          <div class="stat-body">
+            @if (loading()) {
+              <mat-spinner diameter="24"></mat-spinner>
+            } @else {
+              <span class="stat-value">{{ s.value }}</span>
+              <span class="stat-label">{{ s.label }}</span>
+              <span class="stat-sub">{{ s.sub }}</span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+
+  <!-- ── Pending Session Requests ─────────────────── -->
+  <section class="section">
+    <h2 class="section-title">Pending Session Requests</h2>
+
+    @if (loading()) {
+      <div class="center-spinner"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (pendingRequests().length === 0) {
+      <p class="empty-state">No pending session requests.</p>
+    } @else {
+      <mat-card appearance="outlined" class="table-card">
+        <mat-card-content>
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>Learner</th>
+                <th>Topic</th>
+                <th>Date &amp; Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of pendingRequests(); track r.id) {
+                <tr>
+                  <td>
+                    <div class="learner-cell">
+                      <div class="mini-avatar" [style.background]="learnerColor(r.learnerId)">
+                        {{ learnerInitials(r.learnerId) }}
+                      </div>
+                      <span class="learner-name">Learner #{{ r.learnerId }}</span>
+                    </div>
+                  </td>
+                  <td>{{ r.topic || '—' }}</td>
+                  <td>
+                    <mat-icon class="cal-icon">calendar_today</mat-icon>
+                    {{ formatDate(r.sessionDate) }}
+                  </td>
+                  <td>
+                    <div class="action-btns">
+                      <button mat-raised-button color="primary" class="action-btn" (click)="accept(r.id)">Accept</button>
+                      <button mat-stroked-button class="action-btn action-btn--reject" (click)="reject(r.id)">Reject</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+
+  <!-- ── Recent Reviews ───────────────────────────── -->
+  <section class="section">
+    <h2 class="section-title">Recent Reviews</h2>
+
+    @if (reviews().length === 0) {
+      <p class="empty-state">No reviews yet.</p>
+    } @else {
+      <div class="reviews-row">
+        @for (r of reviews(); track r.id) {
+          <mat-card appearance="outlined" class="review-card">
+            <mat-card-content>
+              <div class="review-header">
+                <div class="mini-avatar mini-avatar--lg" [style.background]="learnerColor(r.userId)">
+                  {{ learnerInitials(r.userId) }}
+                </div>
+                <div>
+                  <div class="reviewer-name">User #{{ r.userId }}</div>
+                  <div class="review-date">{{ formatDate(r.createdAt) }}</div>
+                </div>
+              </div>
+              <div class="review-stars">
+                @for (filled of stars(r.rating); track $index) {
+                  <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+                }
+              </div>
+              @if (r.comment) {
+                <p class="review-comment">"{{ r.comment }}"</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+
+</div>

@@ -1,0 +1,131 @@
+<div class="page">
+
+  <header class="dash-header">
+    <div class="header-left">
+      <div class="admin-badge">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Console
+      </div>
+      <h1 class="greeting">Platform Overview</h1>
+      <p class="date-line">{{ today }}</p>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">{{ userInitials() }}</div>
+    </div>
+  </header>
+
+  <section class="stats-row">
+    @for (s of stats(); track s.label) {
+      <mat-card class="stat-card" appearance="outlined">
+        <mat-card-content>
+          <div class="stat-icon-wrap" [style.background]="s.bg">
+            <mat-icon [style.color]="s.color">{{ s.icon }}</mat-icon>
+          </div>
+          <div class="stat-body">
+            @if (loading()) {
+              <mat-spinner diameter="24"></mat-spinner>
+            } @else {
+              <span class="stat-value">{{ s.value }}</span>
+              <span class="stat-label">{{ s.label }}</span>
+              <span class="stat-sub">{{ s.sub }}</span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+
+  <div class="two-col">
+
+    <section class="section">
+      <h2 class="section-title">Recent Users</h2>
+      @if (loading()) {
+        <div class="center-spinner"><mat-spinner diameter="36"></mat-spinner></div>
+      } @else if (recentUsers().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon-wrapper"><mat-icon>group_off</mat-icon></div>
+          <p>No users found.</p>
+        </div>
+      } @else {
+        <mat-card appearance="outlined" class="table-card">
+          <div class="user-list">
+            @for (u of recentUsers(); track u.id) {
+              <div class="user-row">
+                <div class="user-avatar-sm" [style.background]="roleColor(u.role)">
+                  {{ userAvatar(u) }}
+                </div>
+                <div class="user-info">
+                  <span class="user-name">{{ u.name || u.username }}</span>
+                  <span class="user-email">{{ u.email }}</span>
+                </div>
+                <span class="role-badge" [style.color]="roleColor(u.role)" [style.background]="roleBg(u.role)">
+                  {{ u.role }}
+                </span>
+              </div>
+            }
+          </div>
+        </mat-card>
+      }
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">User Distribution</h2>
+      @if (loading()) {
+        <div class="center-spinner"><mat-spinner diameter="36"></mat-spinner></div>
+      } @else {
+        <mat-card appearance="outlined" class="table-card dist-card">
+          <div class="dist-item">
+            <div class="dist-label">
+              <span class="dist-dot" style="background:#4285f4"></span>
+              <span>Learners</span>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar" style="background:#4285f4"
+                [style.width.%]="users().length ? (learners() / users().length) * 100 : 0">
+              </div>
+            </div>
+            <span class="dist-count">{{ learners() }}</span>
+          </div>
+          <div class="dist-item">
+            <div class="dist-label">
+              <span class="dist-dot" style="background:#34a853"></span>
+              <span>Mentors</span>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar" style="background:#34a853"
+                [style.width.%]="users().length ? (mentorUsers() / users().length) * 100 : 0">
+              </div>
+            </div>
+            <span class="dist-count">{{ mentorUsers() }}</span>
+          </div>
+          <div class="dist-item">
+            <div class="dist-label">
+              <span class="dist-dot" style="background:#dd0031"></span>
+              <span>Admins</span>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar" style="background:#dd0031"
+                [style.width.%]="users().length ? (adminUsers() / users().length) * 100 : 0">
+              </div>
+            </div>
+            <span class="dist-count">{{ adminUsers() }}</span>
+          </div>
+          <div class="dist-item">
+            <div class="dist-label">
+              <span class="dist-dot" style="background:#f9a825"></span>
+              <span>Active Mentors</span>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar" style="background:#f9a825"
+                [style.width.%]="mentors().length ? (activeMentors() / (mentors().length || 1)) * 100 : 0">
+              </div>
+            </div>
+            <span class="dist-count">{{ activeMentors() }}</span>
+          </div>
+        </mat-card>
+      }
+    </section>
+
+  </div>
+
+</div>

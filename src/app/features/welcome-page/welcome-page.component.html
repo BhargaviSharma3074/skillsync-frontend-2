@@ -1,0 +1,55 @@
+<div class="welcome-layout">
+  <nav class="navbar">
+    <div class="logo">
+      <mat-icon color="primary">hub</mat-icon>
+      <span>MentorConnect</span>
+    </div>
+    <div class="nav-actions">
+      <button mat-button routerLink="/login" class="nav-link">Log In</button>
+      <button mat-flat-button color="primary" routerLink="/signup" class="signup-btn">Get Started</button>
+    </div>
+  </nav>
+
+  <main class="hero-section">
+    <div class="hero-content">
+      <div class="badge">🚀 Level up your career</div>
+      <h1 class="hero-title">
+        Master new skills with <br>
+        <span class="highlight">world-class mentors</span>
+      </h1>
+      <p class="hero-subtitle">
+        Accelerate your career through personalized 1-on-1 mentorship.
+        Learn from top industry experts in Engineering, Design, and Data.
+      </p>
+
+      <div class="hero-actions">
+        <button mat-flat-button color="primary" class="primary-btn" routerLink="/mentors">
+          Find a Mentor
+        </button>
+        <button mat-stroked-button class="secondary-btn" routerLink="/apply">
+          Become a Mentor
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <section class="features-section">
+    <h2 class="section-title">Why choose MentorConnect?</h2>
+
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+        <div class="feature-card">
+          <div class="icon-wrapper">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 MentorConnect. Empowering careers worldwide.</p>
+  </footer>
+</div>
