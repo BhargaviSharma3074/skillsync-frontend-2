@@ -7,7 +7,7 @@
     </div>
     <div class="header-right">
       <div class="user-avatar">
-        @if (user?.profilePictureUrl) {
+        @if (user.profilePictureUrl) {
           <img class="user-avatar-img" [src]="user.profilePictureUrl" [alt]="user.username" />
         } @else {
           {{ userInitials() }}

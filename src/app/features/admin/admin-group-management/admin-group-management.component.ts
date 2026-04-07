@@ -15,7 +15,7 @@ export interface GroupAdminDTO {
   name: string;
   description: string;
   createdBy: number;
-  memberCount: number;
+  memberCount: number | null | undefined;
   active: boolean;
   createdAt: string;
 }

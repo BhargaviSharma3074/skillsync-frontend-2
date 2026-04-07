@@ -193,8 +193,8 @@
             @for (skill of (m.skills | slice:0:4); track skill) {
               <span class="skill-chip">{{ skill }}</span>
             }
-            @if ((m.skills?.length ?? 0) > 4) {
-              <span class="skill-chip skill-chip--more">+{{ (m.skills?.length ?? 0) - 4 }}</span>
+            @if (m.skills.length > 4) {
+              <span class="skill-chip skill-chip--more">+{{ m.skills.length - 4 }}</span>
             }
           </div>
 

@@ -1,26 +1,12 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import { Component, OnInit, OnDestroy, computed, inject, signal } from '@angular/core';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { NotificationWebSocketService } from 'src/app/core/services/notification-websocket.service';
 import { SidebarComponent } from 'src/app/core/layout/sidebar/sidebar.component';
-import { GroupsComponent } from 'src/app/features/groups/groups.component';
-import { FindMentorsComponent } from 'src/app/features/mentors/find-mentors/find-mentors.component';
-import { NotificationsComponent } from 'src/app/features/notifications/notifications.component';
-import { ProfileComponent } from 'src/app/features/profile/profile.component';
-import { ReviewsComponent } from 'src/app/features/reviews/reviews.component';
-import { MySessionsComponent } from 'src/app/features/sessions/my-sessions.component';
-import { LearnerDashboardComponent } from './learner-dashboard/learner-dashboard.component';
-import { MentorDashboardComponent } from './mentor-dashboard/mentor-dashboard.component';
-import { AdminOverviewComponent } from 'src/app/features/admin/admin-overview/admin-overview.component';
-import { UserManagementComponent } from 'src/app/features/admin/user-management/user-management.component';
-import { MentorApprovalsComponent } from 'src/app/features/admin/mentor-approvals/mentor-approvals.component';
-import { PlatformAnalyticsComponent } from 'src/app/features/admin/platform-analytics/platform-analytics.component';
-import { SkillCatalogComponent } from '../admin/skill-catalog/skill-catalog.component';
-import { AdminGroupManagementComponent } from '../admin/admin-group-management/admin-group-management.component';
-import { SettingsComponent } from '../settings/settings.component';
 
 const PAGE_LABELS: Record<string, { label: string; icon: string }> = {
   overview:         { label: 'Dashboard',        icon: 'dashboard' },
@@ -46,22 +32,8 @@ const PAGE_LABELS: Record<string, { label: string; icon: string }> = {
     CommonModule,
     MatIconModule,
     MatButtonModule,
+    RouterModule,
     SidebarComponent,
-    LearnerDashboardComponent,
-    MentorDashboardComponent,
-    FindMentorsComponent,
-    MySessionsComponent,
-    GroupsComponent,
-    ReviewsComponent,
-    ProfileComponent,
-    NotificationsComponent,
-    AdminOverviewComponent,
-    UserManagementComponent,
-    MentorApprovalsComponent,
-    PlatformAnalyticsComponent,
-    SkillCatalogComponent,
-    AdminGroupManagementComponent,
-    SettingsComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

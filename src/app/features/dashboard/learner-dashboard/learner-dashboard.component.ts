@@ -6,8 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { SkeletonComponent } from 'src/app/shared/skeleton/skeleton.component';
 import { MentorResponse, MentorService } from 'src/app/core/services/mentor.service';
 import { SessionResponse, SessionService } from 'src/app/core/services/session.service';
 import { UserBasic, UserLookupService } from 'src/app/core/services/user-lookup.service';
@@ -22,8 +22,8 @@ import { RouterLink } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
-    RouterLink
+    RouterLink,
+    SkeletonComponent
   ],
   templateUrl: './learner-dashboard.component.html',
   styleUrls: ['./learner-dashboard.component.scss'],
