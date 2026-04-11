@@ -10,24 +10,44 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SkeletonComponent } from 'src/app/shared/skeleton/skeleton.component';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { MentorResponse, MentorService } from 'src/app/core/services/mentor.service';
-import { SessionService, BookSessionPayload } from 'src/app/core/services/session.service';
+import {
+  MentorResponse,
+  MentorService,
+} from 'src/app/core/services/mentor.service';
+import {
+  SessionService,
+  BookSessionPayload,
+} from 'src/app/core/services/session.service';
 import { PaymentService } from 'src/app/core/services/payment.service';
 
 declare var Razorpay: any;
 
-export type BookingStep = 'select' | 'confirm' | 'processing' | 'success' | 'failed' | 'cancelled';
+export type BookingStep =
+  | 'select'
+  | 'confirm'
+  | 'processing'
+  | 'success'
+  | 'failed'
+  | 'cancelled';
 
 @Component({
   selector: 'app-book-session',
   standalone: true,
   imports: [
-    CommonModule, MatDatepickerModule, MatNativeDateModule,
-    MatCardModule, MatButtonModule, MatIconModule, MatInputModule,
-    MatProgressSpinnerModule, FormsModule, RouterLink, SkeletonComponent
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    SkeletonComponent,
   ],
   templateUrl: './book-session.component.html',
-  styleUrls: ['./book-session.component.scss']
+  styleUrls: ['./book-session.component.scss'],
 })
 export class BookSessionComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -53,7 +73,15 @@ export class BookSessionComponent implements OnInit {
   // --- Date constraints ---
   minDate = new Date();
   maxDate = new Date(new Date().setMonth(new Date().getMonth() + 1));
-  allTimeSlots = ['09:00 AM', '10:30 AM', '11:00 AM', '02:00 PM', '04:30 PM', '06:00 PM', '08:00 PM'];
+  allTimeSlots = [
+    '09:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '02:00 PM',
+    '04:30 PM',
+    '06:00 PM',
+    '08:00 PM',
+  ];
   durations = [30, 60, 90];
 
   // --- Computed ---
@@ -63,7 +91,7 @@ export class BookSessionComponent implements OnInit {
     const isToday = date.toDateString() === new Date().toDateString();
     if (!isToday) return this.allTimeSlots;
     const now = new Date();
-    return this.allTimeSlots.filter(slot => {
+    return this.allTimeSlots.filter((slot) => {
       let [time, modifier] = slot.split(' ');
       let [hours, minutes] = time.split(':').map(Number);
       if (modifier === 'PM' && hours < 12) hours += 12;
@@ -89,7 +117,9 @@ export class BookSessionComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('mentorId');
     if (id) {
-      this.mentorService.getById(+id).subscribe(data => this.mentor.set(data));
+      this.mentorService
+        .getById(+id)
+        .subscribe((data) => this.mentor.set(data));
     }
     const slots = this.availableTimeSlots();
     if (slots.length > 0) this.selectedTime.set(slots[0]);
@@ -126,7 +156,7 @@ export class BookSessionComponent implements OnInit {
     const payload: BookSessionPayload = {
       mentorId: this.mentor()?.id,
       sessionDate: `${year}-${month}-${day}T${formattedTime}`,
-      topic: this.sessionTopic() || 'General Mentorship Session'
+      topic: this.sessionTopic() || 'General Mentorship Session',
     };
 
     this.sessionService.book(payload).subscribe({
@@ -135,10 +165,12 @@ export class BookSessionComponent implements OnInit {
         this.initiateRazorpay(session.id);
       },
       error: () => {
-        this.paymentError.set('Failed to create the session. Please try again.');
+        this.paymentError.set(
+          'Failed to create the session. Please try again.',
+        );
         this.currentStep.set('failed');
         this.isProcessing.set(false);
-      }
+      },
     });
   }
 
@@ -163,9 +195,9 @@ export class BookSessionComponent implements OnInit {
                 this.sessionService.cancel(sid).subscribe();
               }
               this.currentStep.set('cancelled');
-            }
+            },
           },
-          theme: { color: '#dd0031' }
+          theme: { color: '#dd0031' },
         };
         const rzp = new Razorpay(options);
         rzp.open();
@@ -174,7 +206,7 @@ export class BookSessionComponent implements OnInit {
         this.paymentError.set('Could not initiate payment. Please try again.');
         this.currentStep.set('failed');
         this.isProcessing.set(false);
-      }
+      },
     });
   }
 
@@ -183,7 +215,7 @@ export class BookSessionComponent implements OnInit {
       sessionId,
       gatewayOrderId: response.razorpay_order_id,
       gatewayPaymentId: response.razorpay_payment_id,
-      gatewaySignature: response.razorpay_signature
+      gatewaySignature: response.razorpay_signature,
     };
     this.paymentService.verifyPayment(verifyData).subscribe({
       next: () => {
@@ -194,26 +226,41 @@ export class BookSessionComponent implements OnInit {
         // Backend publishes payment.failed event → session will be auto-cancelled via RabbitMQ.
         // No retry possible; a new booking is needed.
         this.paymentError.set(
-          `Payment verification failed. Session #${this.bookedSessionId()} has been cancelled. Contact support if amount was deducted (Ref: ${response.razorpay_payment_id}).`
+          `Payment verification failed. Session #${this.bookedSessionId()} has been cancelled. Contact support if amount was deducted (Ref: ${response.razorpay_payment_id}).`,
         );
         this.currentStep.set('failed');
-      }
+      },
     });
   }
 
   // --- Helpers ---
-  mentorInitials(m: MentorResponse) { return `M${m.id}`.slice(0, 2).toUpperCase(); }
+  mentorInitials(m: MentorResponse) {
+    return `M${m.id}`.slice(0, 2).toUpperCase();
+  }
   mentorColor(m: MentorResponse) {
     const colors = ['#e53935', '#43a047', '#1e88e5', '#8e24aa', '#f9a825'];
     return colors[m.id % colors.length];
   }
-  stars(rating: number) { return Array.from({ length: 5 }, (_, i) => i < Math.round(rating)); }
+  stars(rating: number) {
+    return Array.from({ length: 5 }, (_, i) => i < Math.round(rating));
+  }
   formatDate(date: Date | null) {
     return date
-      ? date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })
+      ? date.toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        })
       : 'Select Date';
   }
   shortDate(date: Date | null) {
-    return date ? date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+    return date
+      ? date.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        })
+      : '';
   }
 }

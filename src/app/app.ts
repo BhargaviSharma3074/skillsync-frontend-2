@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastComponent } from './core/ui/toast/toast.component';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,15 @@ import { ToastComponent } from './core/ui/toast/toast.component';
     <router-outlet />
     <app-toast />
   `,
-  styles: `:host { display: block; }`,
+  styles: `
+    :host {
+      display: block;
+    }
+  `,
 })
-export class App {}
+export class App {
+  constructor() {
+    // Initialize theme service to load saved theme from localStorage
+    inject(ThemeService);
+  }
+}

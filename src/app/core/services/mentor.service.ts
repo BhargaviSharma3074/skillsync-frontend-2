@@ -1,10 +1,12 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export interface MentorResponse {
   id: number;
   userId: number;
+  name?: string;
+  username?: string;
   bio: string;
   experience: number;
   rating: number;
@@ -23,7 +25,7 @@ export interface MentorFilters {
   sortBy?: string;
 }
 
-export interface MentorApplyResponse{
+export interface MentorApplyResponse {
   bio: string;
   experience: number;
   hourlyRate: number;
@@ -35,21 +37,29 @@ export class MentorService {
   private http = inject(HttpClient);
   private baseUrl = 'https://skillsync.mooo.com/api';
 
-  getAll(filters?: MentorFilters): Observable<MentorResponse[]> {
+  getAll(filters?: MentorFilters, pageSize: number = 12): Observable<any> {
     let params = new HttpParams();
-    if (filters?.skillId)   params = params.set('skillId',   filters.skillId);
+    if (filters?.skillId) params = params.set('skillId', filters.skillId);
     if (filters?.minRating) params = params.set('minRating', filters.minRating);
-    if (filters?.maxRate)   params = params.set('maxRate',   filters.maxRate);
-    if (filters?.minExp)    params = params.set('minExp',    filters.minExp);
-    if (filters?.sortBy)    params = params.set('sortBy',    filters.sortBy);
-    return this.http.get<MentorResponse[]>(`${this.baseUrl}/mentors`, { params });
+    if (filters?.maxRate) params = params.set('maxRate', filters.maxRate);
+    if (filters?.minExp) params = params.set('minExp', filters.minExp);
+    if (filters?.sortBy) params = params.set('sortBy', filters.sortBy);
+    // Add pagination parameters
+    params = params.set('page', '0');
+    params = params.set('size', pageSize.toString());
+    return this.http.get<any>(`${this.baseUrl}/mentors`, {
+      params,
+    });
   }
 
   getById(id: number): Observable<MentorResponse> {
     return this.http.get<MentorResponse>(`${this.baseUrl}/mentors/${id}`);
   }
 
-  applyMentor(paylod: MentorApplyResponse): Observable<MentorApplyResponse>{
-    return this.http.post<MentorApplyResponse>(`${this.baseUrl}/mentors/apply`, paylod);
+  applyMentor(paylod: MentorApplyResponse): Observable<MentorApplyResponse> {
+    return this.http.post<MentorApplyResponse>(
+      `${this.baseUrl}/mentors/apply`,
+      paylod,
+    );
   }
 }

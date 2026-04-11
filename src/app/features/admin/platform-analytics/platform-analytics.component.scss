@@ -26,8 +26,8 @@
   mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
 }
 
-.page-title { font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem; }
-.page-sub   { font-size: 0.9rem; color: #6b7280; margin: 0; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 /* ── KPI Cards ───────────────────────────────────── */
 .stats-row {
@@ -39,11 +39,11 @@
 
 .stat-card {
   border-radius: 16px !important;
-  background: #fff !important;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border);
   transition: all 0.2s ease;
 
-  &:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); transform: translateY(-2px); border-color: #cbd5e1; }
+  &:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); transform: translateY(-2px); border-color: var(--border-subtle); }
 
   mat-card-content {
     display: flex;
@@ -66,8 +66,8 @@
 }
 
 .stat-body   { display: flex; flex-direction: column; min-width: 0; }
-.stat-value  { font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1.1; }
-.stat-label  { font-size: 0.82rem; font-weight: 500; color: #64748b; margin-top: 0.25rem; }
+.stat-value  { font-size: 1.6rem; font-weight: 800; color: var(--text-primary); line-height: 1.1; }
+.stat-label  { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); margin-top: 0.25rem; }
 
 /* ── Two-col ─────────────────────────────────────── */
 .two-col {
@@ -81,12 +81,13 @@
 
 /* ── Sections ────────────────────────────────────── */
 .section { margin-bottom: 3rem; }
-.section-title { font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 1.25rem; }
+.section-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0 0 1.25rem; }
 
 /* ── Chart Card ──────────────────────────────────── */
 .chart-card {
   border-radius: 16px !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 1px solid var(--card-border) !important;
+  background: var(--card-bg) !important;
   box-shadow: none !important;
   padding: 1.5rem;
 }
@@ -118,9 +119,9 @@
   flex-shrink: 0;
 }
 
-.legend-label { flex: 1; font-size: 0.85rem; color: #374151; font-weight: 500; }
-.legend-count { font-size: 0.875rem; font-weight: 700; color: #0f172a; min-width: 24px; text-align: right; }
-.legend-pct   { font-size: 0.775rem; color: #64748b; min-width: 36px; text-align: right; }
+.legend-label { flex: 1; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+.legend-count { font-size: 0.875rem; font-weight: 700; color: var(--text-primary); min-width: 24px; text-align: right; }
+.legend-pct   { font-size: 0.775rem; color: var(--text-secondary); min-width: 36px; text-align: right; }
 
 /* ── Vertical bar chart ──────────────────────────── */
 .bar-chart-vertical {
@@ -147,7 +148,7 @@
   transition: height 0.5s ease;
 }
 
-.v-bar-label { font-size: 0.7rem; color: #64748b; font-weight: 500; }
+.v-bar-label { font-size: 0.7rem; color: var(--text-secondary); font-weight: 500; }
 
 /* ── Registration bar chart ──────────────────────── */
 .bar-chart {
@@ -172,7 +173,7 @@
   height: 100px;
   display: flex;
   align-items: flex-end;
-  background: #f8fafc;
+  background: var(--hover-bg-dark);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -185,15 +186,16 @@
   transition: height 0.5s ease;
 }
 
-.bar-count { font-size: 0.75rem; font-weight: 700; color: #0f172a; }
-.bar-label { font-size: 0.68rem; color: #64748b; font-weight: 500; white-space: nowrap; }
+.bar-count { font-size: 0.75rem; font-weight: 700; color: var(--text-primary); }
+.bar-label { font-size: 0.68rem; color: var(--text-secondary); font-weight: 500; white-space: nowrap; }
 
 .no-data { text-align: center; color: #94a3b8; font-size: 0.875rem; padding: 2rem 0; }
 
 /* ── Skills chart ────────────────────────────────── */
 .skills-card {
   border-radius: 16px !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 1px solid var(--card-border) !important;
+  background: var(--card-bg) !important;
   box-shadow: none !important;
   padding: 1.5rem;
 }
@@ -210,7 +212,7 @@
   width: 140px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
   flex-shrink: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -220,7 +222,7 @@
 .skill-bar-wrap {
   flex: 1;
   height: 8px;
-  background: #f1f5f9;
+  background: var(--hover-bg);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -236,7 +238,7 @@
 .skill-count {
   font-size: 0.775rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--text-secondary);
   width: 80px;
   text-align: right;
   flex-shrink: 0;
@@ -251,8 +253,8 @@
 
 .status-card {
   border-radius: 16px !important;
-  background: #fff !important;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border);
 
   mat-card-content {
     display: flex;
@@ -267,12 +269,12 @@
 
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
-  padding: 3rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
-  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+  padding: 3rem 2rem; color: var(--text-secondary); text-align: center; gap: 1rem;
+  background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--border-subtle);
 
   .empty-icon-wrapper {
     width: 56px; height: 56px; border-radius: 50%;
-    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    background: var(--hover-bg); display: flex; align-items: center; justify-content: center;
     mat-icon { font-size: 1.75rem; width: 1.75rem; height: 1.75rem; color: #94a3b8; }
   }
 

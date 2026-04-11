@@ -24,6 +24,12 @@
       </div>
 
       <div class="topbar-right">
+        <!-- Theme Toggle -->
+        <button class="topbar-icon-btn" (click)="toggleTheme()" 
+          [attr.aria-label]="themeService.theme() === 'light' ? 'Switch to dark theme' : 'Switch to light theme'">
+          <mat-icon>{{ themeService.theme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+        </button>
+
         <!-- Notification Bell -->
         <button class="topbar-icon-btn" [routerLink]="['/dashboard/notifications']"
           [class.has-badge]="unreadCount() > 0" aria-label="Notifications">

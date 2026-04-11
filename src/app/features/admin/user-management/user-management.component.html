@@ -105,14 +105,14 @@
                   <span class="role-badge"
                     [style.color]="roleColor(u.role)"
                     [style.background]="roleBg(u.role)">
-                    @if (u.role === 'ADMIN') {
+                    @if (isAdmin(u)) {
                       <mat-icon class="role-icon">shield</mat-icon>
-                    } @else if (u.role === 'MENTOR') {
+                    } @else if (isMentor(u)) {
                       <mat-icon class="role-icon">psychology</mat-icon>
                     } @else {
                       <mat-icon class="role-icon">school</mat-icon>
                     }
-                    {{ u.role }}
+                    {{ isMentor(u) ? 'MENTOR' : (isAdmin(u) ? 'ADMIN' : 'LEARNER') }}
                   </span>
                 </td>
                 <td class="date-cell">{{ formatDate(u.createdAt) }}</td>

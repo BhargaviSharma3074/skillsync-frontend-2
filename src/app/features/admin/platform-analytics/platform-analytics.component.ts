@@ -17,52 +17,82 @@ import { MentorResponse } from 'src/app/core/services/mentor.service';
 export class PlatformAnalyticsComponent implements OnInit {
   private adminService = inject(AdminService);
 
-  users      = signal<UserDTO[]>([]);
-  mentors    = signal<MentorResponse[]>([]);
-  loading    = signal(true);
+  users = signal<UserDTO[]>([]);
+  mentors = signal<MentorResponse[]>([]);
+  totalUsersCount = signal(0);
+  loading = signal(true);
+
+  mentorUserIds = computed(() => new Set(this.mentors().map(m => m.userId)));
 
   // User metrics
-  totalUsers    = computed(() => this.users().length);
-  learnerCount  = computed(() => this.users().filter(u => u.role === 'LEARNER').length);
-  mentorCount   = computed(() => this.users().filter(u => u.role === 'MENTOR').length);
-  adminCount    = computed(() => this.users().filter(u => u.role === 'ADMIN').length);
+  totalUsers = computed(() => this.totalUsersCount());
+  learnerCount = computed(
+    () => this.users().filter((u) => {
+      const r = (u.role || '').toUpperCase();
+      const isMentor = this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+      const isAdmin = r.includes('ADMIN');
+      return !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
+    }).length,
+  );
+  mentorCount = computed(
+    () => this.users().filter((u) => {
+      const r = (u.role || '').toUpperCase();
+      return this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+    }).length,
+  );
+  adminCount = computed(
+    () => this.users().filter((u) => (u.role || '').toUpperCase().includes('ADMIN')).length,
+  );
 
   // Mentor metrics
-  activeMentors  = computed(() => this.mentors().filter(m => m.status === 'ACTIVE').length);
-  pendingMentors = computed(() => this.mentors().filter(m => m.status === 'PENDING').length);
-  avgRating      = computed(() => {
-    const active = this.mentors().filter(m => m.status === 'ACTIVE');
+  activeMentors = computed(
+    () => this.mentors().filter((m) => m.status === 'ACTIVE').length,
+  );
+  pendingMentors = computed(
+    () => this.mentors().filter((m) => m.status === 'PENDING').length,
+  );
+  avgRating = computed(() => {
+    const active = this.mentors().filter((m) => m.status === 'ACTIVE');
     if (!active.length) return 0;
     return active.reduce((sum, m) => sum + (m.rating ?? 0), 0) / active.length;
   });
-  totalReviews   = computed(() =>
-    this.mentors().reduce((sum, m) => sum + (m.reviewCount ?? 0), 0)
+  totalReviews = computed(() =>
+    this.mentors().reduce((sum, m) => sum + (m.reviewCount ?? 0), 0),
   );
 
   // Avg hourly rate
   avgHourlyRate = computed(() => {
-    const active = this.mentors().filter(m => m.status === 'ACTIVE');
+    const active = this.mentors().filter((m) => m.status === 'ACTIVE');
     if (!active.length) return 0;
-    return active.reduce((sum, m) => sum + (m.hourlyRate ?? 0), 0) / active.length;
+    return (
+      active.reduce((sum, m) => sum + (m.hourlyRate ?? 0), 0) / active.length
+    );
   });
 
   // Registration trend (group by month from createdAt)
   registrationByMonth = computed(() => {
     const counts: Record<string, number> = {};
-    this.users().forEach(u => {
+    this.users().forEach((u) => {
       if (!u.createdAt) return;
-      const key = new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      const key = new Date(u.createdAt).toLocaleDateString('en-US', {
+        month: 'short',
+        year: '2-digit',
+      });
       counts[key] = (counts[key] ?? 0) + 1;
     });
     const entries = Object.entries(counts).slice(-6); // last 6 months
-    const max = Math.max(...entries.map(e => e[1]), 1);
-    return entries.map(([label, count]) => ({ label, count, pct: (count / max) * 100 }));
+    const max = Math.max(...entries.map((e) => e[1]), 1);
+    return entries.map(([label, count]) => ({
+      label,
+      count,
+      pct: (count / max) * 100,
+    }));
   });
 
   // Top skills across mentors
   topSkills = computed(() => {
     const counts: Record<string, number> = {};
-    this.mentors().forEach(m => {
+    this.mentors().forEach((m) => {
       (m.skills ?? []).forEach((s: string) => {
         counts[s] = (counts[s] ?? 0) + 1;
       });
@@ -75,22 +105,67 @@ export class PlatformAnalyticsComponent implements OnInit {
   });
 
   kpis = computed(() => [
-    { label: 'Total Users',      value: this.totalUsers(),                    icon: 'group',         color: '#4285f4', bg: '#e8f0fe' },
-    { label: 'Active Mentors',   value: this.activeMentors(),                 icon: 'psychology',    color: '#34a853', bg: '#e6f4ea' },
-    { label: 'Avg Rating',       value: this.avgRating().toFixed(1),          icon: 'star',          color: '#f9a825', bg: '#fff8e1' },
-    { label: 'Total Reviews',    value: this.totalReviews(),                  icon: 'rate_review',   color: '#8e24aa', bg: '#f3e5f5' },
-    { label: 'Pending Approvals',value: this.pendingMentors(),                icon: 'pending',       color: '#dd0031', bg: '#fce4ec' },
-    { label: 'Avg Hourly Rate',  value: '₹' + this.avgHourlyRate().toFixed(0),icon: 'payments',      color: '#0097a7', bg: '#e0f7fa' },
+    {
+      label: 'Total Users',
+      value: this.totalUsers(),
+      icon: 'group',
+      color: '#4285f4',
+      bg: '#e8f0fe',
+    },
+    {
+      label: 'Active Mentors',
+      value: this.activeMentors(),
+      icon: 'psychology',
+      color: '#34a853',
+      bg: '#e6f4ea',
+    },
+    {
+      label: 'Avg Rating',
+      value: this.avgRating().toFixed(1),
+      icon: 'star',
+      color: '#f9a825',
+      bg: '#fff8e1',
+    },
+    {
+      label: 'Total Reviews',
+      value: this.totalReviews(),
+      icon: 'rate_review',
+      color: '#8e24aa',
+      bg: '#f3e5f5',
+    },
+    {
+      label: 'Pending Approvals',
+      value: this.pendingMentors(),
+      icon: 'pending',
+      color: '#dd0031',
+      bg: '#fce4ec',
+    },
+    {
+      label: 'Avg Hourly Rate',
+      value: '₹' + this.avgHourlyRate().toFixed(0),
+      icon: 'payments',
+      color: '#0097a7',
+      bg: '#e0f7fa',
+    },
   ]);
 
   ngOnInit() {
-    this.adminService.getAllUsers().subscribe({
-      next: data => { this.users.set(data); this.loading.set(false); },
+    this.adminService.getAllUsers(1000).subscribe({
+      next: (data) => {
+        const list: UserDTO[] = Array.isArray(data)
+          ? data
+          : (data?.content ?? []);
+        this.users.set(list);
+        this.totalUsersCount.set(data?.totalElements ?? list.length);
+        this.loading.set(false);
+      },
       error: () => this.loading.set(false),
     });
     this.adminService.getAllMentors().subscribe({
       next: (data: any) => {
-        const list: MentorResponse[] = Array.isArray(data) ? data : (data?.content ?? []);
+        const list: MentorResponse[] = Array.isArray(data)
+          ? data
+          : (data?.content ?? []);
         this.mentors.set(list);
       },
       error: () => {},

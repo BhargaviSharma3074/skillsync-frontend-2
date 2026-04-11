@@ -55,8 +55,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #f4f6f9;
+  background: var(--bg-secondary);
   min-width: 0;
+  transition: background-color 0.3s ease;
 }
 
 /* ── Topbar ──────────────────────────────────────── */
@@ -67,11 +68,12 @@
   padding: 0 1.75rem;
   height: 60px;
   min-height: 60px;
-  background: #ffffff;
-  border-bottom: 1px solid #e8ecf0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   z-index: 100;
   flex-shrink: 0;
   gap: 1rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 
   @media (max-width: 768px) {
     padding: 0 1rem;
@@ -96,12 +98,12 @@
   background: transparent;
   border-radius: 10px;
   cursor: pointer;
-  color: #64748b;
+  color: var(--text-secondary);
   flex-shrink: 0;
   transition: background 0.15s;
 
   mat-icon { font-size: 1.25rem; width: 1.25rem; height: 1.25rem; }
-  &:hover { background: #f1f5f9; color: #0f172a; }
+  &:hover { background: var(--hover-bg); color: var(--text-primary); }
 
   @media (max-width: 768px) {
     display: flex;
@@ -119,7 +121,7 @@
 .topbar-page-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
   letter-spacing: -0.2px;
   white-space: nowrap;
   overflow: hidden;
@@ -145,12 +147,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #64748b;
+  color: var(--text-secondary);
   transition: all 0.15s;
 
   mat-icon { font-size: 1.2rem; width: 1.2rem; height: 1.2rem; }
-  &:hover { background: #f1f5f9; color: #0f172a; }
-  &.has-badge { color: #0f172a; }
+  &:hover { background: var(--hover-bg); color: var(--text-primary); }
+  &.has-badge { color: var(--text-primary); }
 }
 
 .notif-badge {
@@ -179,18 +181,42 @@
   gap: 0.6rem;
   padding: 5px 10px 5px 5px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-primary);
   cursor: pointer;
   transition: all 0.15s;
 
-  &:hover { background: #f8fafc; border-color: #cbd5e1; }
+  &:hover { background: var(--hover-bg-dark); border-color: var(--text-secondary); }
 
   @media (max-width: 480px) {
     padding: 5px;
     border: none;
     background: transparent;
   }
+}
+
+.topbar-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.topbar-username {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-role {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .topbar-avatar {
@@ -218,6 +244,8 @@
 .topbar-user-info {
   display: flex;
   flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
   text-align: left;
 
   @media (max-width: 480px) {
@@ -226,9 +254,9 @@
 }
 
 .topbar-username {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
   line-height: 1.2;
   max-width: 120px;
   white-space: nowrap;
@@ -237,8 +265,8 @@
 }
 
 .topbar-role {
-  font-size: 0.65rem;
-  color: #94a3b8;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -248,6 +276,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  background: var(--bg-secondary);
 
   & > * { flex-shrink: 0; }
   & > app-groups { flex: 1; overflow: hidden; }
@@ -262,10 +291,10 @@
   height: 100%;
   min-height: 400px;
   gap: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-tertiary);
   text-align: center;
 
   mat-icon { font-size: 3rem; width: 3rem; height: 3rem; }
-  h2 { font-size: 1.25rem; font-weight: 700; color: #374151; margin: 0; }
+  h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-secondary); margin: 0; }
   p  { margin: 0; font-size: 0.875rem; }
 }

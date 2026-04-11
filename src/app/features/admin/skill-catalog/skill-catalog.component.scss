@@ -1,4 +1,4 @@
-:host { display: block; background: #f8fafc; min-height: 100vh; }
+:host { display: block; background: var(--hover-bg-dark); min-height: 100vh; }
 
 .page {
   padding: 2rem;
@@ -36,23 +36,23 @@
 .page-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0 0 0.25rem;
 }
 
-.page-sub { font-size: 0.9rem; color: #6b7280; margin: 0; }
+.page-sub { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 .mini-stat {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 0.875rem 1.5rem;
   text-align: center;
   min-width: 100px;
 }
 
-.mini-stat-value { display: block; font-size: 1.75rem; font-weight: 800; color: #0f172a; }
-.mini-stat-label { font-size: 0.75rem; color: #64748b; font-weight: 500; }
+.mini-stat-value { display: block; font-size: 1.75rem; font-weight: 800; color: var(--text-primary); }
+.mini-stat-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
 
 /* ── Filters (Used for Add Skill Form) ───────────── */
 .filters-bar {
@@ -72,7 +72,7 @@
 
 .results-count {
   font-size: 0.825rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 500;
   margin-left: auto;
 }
@@ -80,7 +80,7 @@
 /* ── Table ───────────────────────────────────────── */
 .table-card {
   border-radius: 16px !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 1px solid var(--card-border) !important;
   box-shadow: none !important;
   overflow: hidden;
 }
@@ -93,27 +93,27 @@
   min-width: 640px;
 
   th {
-    background: #f8fafc;
+    background: var(--hover-bg-dark);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: #64748b;
+    color: var(--text-secondary);
     padding: 1rem 1.5rem;
     text-align: left;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--card-border);
   }
 
   td {
     font-size: 0.875rem;
     color: #334155;
     padding: 0.875rem 1.5rem;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--hover-bg);
     vertical-align: middle;
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafc; }
+  tr:hover td { background: var(--hover-bg-dark); }
 }
 
 /* ── User cell ───────────────────────────────────── */
@@ -130,17 +130,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--card-bg);
   font-size: 0.8rem;
   font-weight: 700;
   flex-shrink: 0;
 }
 
-.user-display-name { font-weight: 600; color: #0f172a; }
+.user-display-name { font-weight: 600; color: var(--text-primary); }
 
-.username-cell { color: #64748b; font-size: 0.83rem; }
+.username-cell { color: var(--text-secondary); font-size: 0.83rem; }
 .email-cell    { color: #475569; }
-.date-cell     { color: #64748b; font-size: 0.83rem; white-space: nowrap; }
+.date-cell     { color: var(--text-secondary); font-size: 0.83rem; white-space: nowrap; }
 
 /* ── Role Badge ──────────────────────────────────── */
 .role-badge {
@@ -166,12 +166,12 @@
 
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
-  padding: 5rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
-  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+  padding: 5rem 2rem; color: var(--text-secondary); text-align: center; gap: 1rem;
+  background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--border-subtle);
 
   .empty-icon-wrapper {
     width: 64px; height: 64px; border-radius: 50%;
-    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    background: var(--hover-bg); display: flex; align-items: center; justify-content: center;
     mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
   }
 

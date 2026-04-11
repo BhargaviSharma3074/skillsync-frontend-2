@@ -87,7 +87,7 @@
                   M{{ m.userId }}
                 </div>
                 <div class="mentor-meta">
-                  <div class="mentor-id">Mentor #{{ m.id }}</div>
+                  <div class="mentor-id">{{ m.name || m.username || 'Mentor #' + m.id }}</div>
                   <div class="user-ref">User ID: {{ m.userId }}</div>
                 </div>
                 <span class="status-badge"
@@ -179,7 +179,7 @@
                       <div class="mentor-cell">
                         <div class="avatar-sm" [style.background]="avatarColor(m.id)">M{{ m.userId }}</div>
                         <div>
-                          <div class="mentor-name-cell">Mentor #{{ m.id }}</div>
+                          <div class="mentor-name-cell">{{ m.name || m.username || 'Mentor #' + m.id }}</div>
                           <div class="user-ref-sm">User #{{ m.userId }}</div>
                         </div>
                       </div>

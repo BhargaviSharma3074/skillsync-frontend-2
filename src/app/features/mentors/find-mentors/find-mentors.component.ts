@@ -8,9 +8,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { SkeletonComponent } from 'src/app/shared/skeleton/skeleton.component';
-import { MentorFilters, MentorResponse, MentorService } from 'src/app/core/services/mentor.service';
-import { SkillResponse, SkillService } from 'src/app/core/services/skill.service';
-import { UserBasic, UserLookupService } from 'src/app/core/services/user-lookup.service';
+import {
+  MentorFilters,
+  MentorResponse,
+  MentorService,
+} from 'src/app/core/services/mentor.service';
+import {
+  SkillResponse,
+  SkillService,
+} from 'src/app/core/services/skill.service';
+import {
+  UserBasic,
+  UserLookupService,
+} from 'src/app/core/services/user-lookup.service';
 
 @Component({
   selector: 'app-find-mentors',
@@ -32,43 +42,49 @@ import { UserBasic, UserLookupService } from 'src/app/core/services/user-lookup.
 })
 export class FindMentorsComponent implements OnInit {
   private mentorService = inject(MentorService);
-  private skillService  = inject(SkillService);
-  private userLookup    = inject(UserLookupService);
+  private skillService = inject(SkillService);
+  private userLookup = inject(UserLookupService);
 
-  mentors  = signal<MentorResponse[]>([]);
-  skills   = signal<SkillResponse[]>([]);
-  userMap  = signal(new Map<number, UserBasic>());
-  loading  = signal(true);
+  mentors = signal<MentorResponse[]>([]);
+  skills = signal<SkillResponse[]>([]);
+  userMap = signal(new Map<number, UserBasic>());
+  loading = signal(true);
   apiError = signal('');
 
-  filters         = signal<MentorFilters>({ sortBy: 'rating' });
+  filters = signal<MentorFilters>({ sortBy: 'rating' });
   selectedSkillId = signal<number | null>(null);
-  minRating       = signal<number | null>(null);
-  maxRate         = signal<number | null>(null);
-  searchTerm      = signal('');
-  filtersOpen     = signal(false);
+  minRating = signal<number | null>(null);
+  maxRate = signal<number | null>(null);
+  searchTerm = signal('');
+  filtersOpen = signal(false);
 
   filteredMentors = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
     if (!term) return this.mentors();
-    return this.mentors().filter(m => {
-      const name = this.userLookup.displayName(this.userMap().get(m.userId)).toLowerCase();
+    return this.mentors().filter((m) => {
+      const name = this.userLookup
+        .displayName(this.userMap().get(m.userId))
+        .toLowerCase();
       return (
         name.includes(term) ||
         m.bio?.toLowerCase().includes(term) ||
-        m.skills?.some(s => s.toLowerCase().includes(term))
+        m.skills?.some((s) => s.toLowerCase().includes(term))
       );
     });
   });
 
   get hasActiveFilters() {
-    return !!(this.selectedSkillId() || this.minRating() || this.maxRate() ||
-              this.filters().sortBy !== 'rating');
+    return !!(
+      this.selectedSkillId() ||
+      this.minRating() ||
+      this.maxRate() ||
+      this.filters().sortBy !== 'rating'
+    );
   }
 
   ngOnInit() {
     this.skillService.getAll().subscribe({
-      next: skills => this.skills.set(skills),
+      next: (skills) => this.skills.set(skills),
       error: () => {},
     });
     this.loadMentors();
@@ -79,22 +95,29 @@ export class FindMentorsComponent implements OnInit {
     this.apiError.set('');
 
     const f: MentorFilters = { sortBy: this.filters().sortBy };
-    if (this.selectedSkillId()) f.skillId   = this.selectedSkillId()!;
-    if (this.minRating())       f.minRating = this.minRating()!;
-    if (this.maxRate())         f.maxRate   = this.maxRate()!;
+    if (this.selectedSkillId()) f.skillId = this.selectedSkillId()!;
+    if (this.minRating()) f.minRating = this.minRating()!;
+    if (this.maxRate()) f.maxRate = this.maxRate()!;
 
-    this.mentorService.getAll(f).subscribe({
+    // Load up to 500 mentors to enable search without pagination limitations
+    this.mentorService.getAll(f, 500).subscribe({
       next: (data: any) => {
-        const list: MentorResponse[] = Array.isArray(data) ? data : (data?.content ?? []);
+        const list: MentorResponse[] = Array.isArray(data)
+          ? data
+          : (data?.content ?? []);
         this.mentors.set(list);
         this.loading.set(false);
-        const ids = list.map(m => m.userId);
+        const ids = list.map((m) => m.userId);
         if (ids.length) {
-          this.userLookup.batchFetch(ids).subscribe(map => this.userMap.set(map));
+          this.userLookup
+            .batchFetch(ids)
+            .subscribe((map) => this.userMap.set(map));
         }
       },
       error: (err) => {
-        this.apiError.set(err?.error?.message || err?.message || 'Failed to load mentors.');
+        this.apiError.set(
+          err?.error?.message || err?.message || 'Failed to load mentors.',
+        );
         this.loading.set(false);
       },
     });
@@ -116,19 +139,19 @@ export class FindMentorsComponent implements OnInit {
   }
 
   removeFilter(type: 'skill' | 'rating' | 'rate') {
-    if (type === 'skill')  this.selectedSkillId.set(null);
+    if (type === 'skill') this.selectedSkillId.set(null);
     if (type === 'rating') this.minRating.set(null);
-    if (type === 'rate')   this.maxRate.set(null);
+    if (type === 'rate') this.maxRate.set(null);
     this.loadMentors();
   }
 
   updateSort(value: string) {
-    this.filters.update(f => ({ ...f, sortBy: value as any }));
+    this.filters.update((f) => ({ ...f, sortBy: value as any }));
     this.loadMentors();
   }
 
   skillName(id: number): string {
-    return this.skills().find(s => s.id === id)?.name ?? `Skill #${id}`;
+    return this.skills().find((s) => s.id === id)?.name ?? `Skill #${id}`;
   }
 
   mentorName(mentor: MentorResponse): string {
@@ -139,11 +162,23 @@ export class FindMentorsComponent implements OnInit {
     const name = this.mentorName(mentor);
     return name === 'Unknown'
       ? `M${mentor.id}`.slice(0, 2).toUpperCase()
-      : name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      : name
+          .split(' ')
+          .map((n) => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2);
   }
 
   avatarColor(mentor: MentorResponse): string {
-    const colors = ['#e53935', '#43a047', '#1e88e5', '#8e24aa', '#f9a825', '#00897b'];
+    const colors = [
+      '#e53935',
+      '#43a047',
+      '#1e88e5',
+      '#8e24aa',
+      '#f9a825',
+      '#00897b',
+    ];
     return colors[mentor.id % colors.length];
   }
 
