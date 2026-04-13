@@ -45,24 +45,28 @@ export class AdminOverviewComponent implements OnInit {
   totalUsersCount = signal(0);
   loading = signal(true);
 
-  mentorUserIds = computed(() => new Set(this.mentors().map(m => m.userId)));
+  mentorUserIds = computed(() => new Set(this.mentors().map((m) => m.userId)));
 
   learners = computed(
-    () => this.users().filter((u) => {
-      const r = (u.role || '').toUpperCase();
-      const isMentor = this.mentorUserIds().has(u.id) || r.includes('MENTOR');
-      const isAdmin = r.includes('ADMIN');
-      return !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
-    }).length,
+    () =>
+      this.users().filter((u) => {
+        const r = (u.role || '').toUpperCase();
+        const isMentor = this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+        const isAdmin = r.includes('ADMIN');
+        return !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
+      }).length,
   );
   mentorUsers = computed(
-    () => this.users().filter((u) => {
-      const r = (u.role || '').toUpperCase();
-      return this.mentorUserIds().has(u.id) || r.includes('MENTOR');
-    }).length,
+    () =>
+      this.users().filter((u) => {
+        const r = (u.role || '').toUpperCase();
+        return this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+      }).length,
   );
   adminUsers = computed(
-    () => this.users().filter((u) => (u.role || '').toUpperCase().includes('ADMIN')).length,
+    () =>
+      this.users().filter((u) => (u.role || '').toUpperCase().includes('ADMIN'))
+        .length,
   );
   activeMentors = computed(
     () => this.mentors().filter((m) => m.status === 'ACTIVE').length,
@@ -148,17 +152,17 @@ export class AdminOverviewComponent implements OnInit {
 
   roleColor(role: string): string {
     const r = (role || '').toUpperCase();
-    if (r.includes('ADMIN')) return '#dd0031';
-    if (r.includes('MENTOR')) return '#34a853';
-    if (r.includes('LEARNER')) return '#4285f4';
+    if (r.includes('ADMIN')) return '#ec4899';
+    if (r.includes('MENTOR')) return '#7c3aed';
+    if (r.includes('LEARNER')) return '#3b82f6';
     return '#6b7280';
   }
 
   roleBg(role: string): string {
     const r = (role || '').toUpperCase();
-    if (r.includes('ADMIN')) return '#fce4ec';
-    if (r.includes('MENTOR')) return '#e6f4ea';
-    if (r.includes('LEARNER')) return '#e8f0fe';
+    if (r.includes('ADMIN')) return '#fce7f3';
+    if (r.includes('MENTOR')) return '#ede9fe';
+    if (r.includes('LEARNER')) return '#dbeafe';
     return '#f3f4f6';
   }
 

@@ -107,7 +107,7 @@ khost { display: block; }
 
   td {
     font-size: 0.875rem;
-    color: #334155;
+    color: var(--text-primary);
     padding: 0.875rem 1.5rem;
     border-bottom: 1px solid var(--hover-bg);
     vertical-align: middle;
@@ -140,7 +140,7 @@ khost { display: block; }
 .user-display-name { font-weight: 600; color: var(--text-primary); }
 
 .username-cell { color: var(--text-secondary); font-size: 0.83rem; }
-.email-cell    { color: #475569; }
+.email-cell    { color: var(--text-secondary); }
 .date-cell     { color: var(--text-secondary); font-size: 0.83rem; white-space: nowrap; }
 
 /* ── Role Badge ──────────────────────────────────── */
@@ -173,7 +173,7 @@ khost { display: block; }
   .empty-icon-wrapper {
     width: 64px; height: 64px; border-radius: 50%;
     background: var(--hover-bg); display: flex; align-items: center; justify-content: center;
-    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: var(--text-tertiary); }
   }
 
   p { margin: 0; font-size: 0.95rem; font-weight: 500; }

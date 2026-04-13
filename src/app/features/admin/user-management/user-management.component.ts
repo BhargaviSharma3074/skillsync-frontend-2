@@ -41,7 +41,7 @@ export class UserManagementComponent implements OnInit {
   roleFilter = signal<string>('ALL');
 
   mentors = signal<MentorResponse[]>([]);
-  mentorUserIds = computed(() => new Set(this.mentors().map(m => m.userId)));
+  mentorUserIds = computed(() => new Set(this.mentors().map((m) => m.userId)));
 
   filteredUsers = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
@@ -61,7 +61,9 @@ export class UserManagementComponent implements OnInit {
       if (!matchesRole) {
         if (role === 'MENTOR') matchesRole = isMentor;
         else if (role === 'ADMIN') matchesRole = isAdmin;
-        else if (role === 'LEARNER') matchesRole = !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
+        else if (role === 'LEARNER')
+          matchesRole =
+            !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
       }
 
       return matchesSearch && matchesRole;
@@ -69,7 +71,10 @@ export class UserManagementComponent implements OnInit {
   });
 
   isMentor(user: UserDTO): boolean {
-    return this.mentorUserIds().has(user.id) || (user.role || '').toUpperCase().includes('MENTOR');
+    return (
+      this.mentorUserIds().has(user.id) ||
+      (user.role || '').toUpperCase().includes('MENTOR')
+    );
   }
 
   isAdmin(user: UserDTO): boolean {
@@ -105,17 +110,17 @@ export class UserManagementComponent implements OnInit {
 
   roleColor(role: string): string {
     const r = (role || '').toUpperCase();
-    if (r.includes('ADMIN')) return '#dd0031';
-    if (r.includes('MENTOR')) return '#2e7d32';
-    if (r.includes('LEARNER')) return '#1e88e5';
+    if (r.includes('ADMIN')) return '#ec4899';
+    if (r.includes('MENTOR')) return '#7c3aed';
+    if (r.includes('LEARNER')) return '#3b82f6';
     return '#6b7280';
   }
 
   roleBg(role: string): string {
     const r = (role || '').toUpperCase();
-    if (r.includes('ADMIN')) return '#fce4ec';
-    if (r.includes('MENTOR')) return '#e8f5e9';
-    if (r.includes('LEARNER')) return '#e3f2fd';
+    if (r.includes('ADMIN')) return '#fce7f3';
+    if (r.includes('MENTOR')) return '#ede9fe';
+    if (r.includes('LEARNER')) return '#dbeafe';
     return '#f3f4f6';
   }
 
@@ -131,12 +136,12 @@ export class UserManagementComponent implements OnInit {
 
   avatarColor(user: UserDTO): string {
     const colors = [
-      '#e53935',
-      '#43a047',
-      '#1e88e5',
-      '#8e24aa',
-      '#f9a825',
-      '#0097a7',
+      '#7c3aed',
+      '#ec4899',
+      '#06b6d4',
+      '#3b82f6',
+      '#22c55e',
+      '#f59e0b',
     ];
     return colors[user.id % colors.length];
   }

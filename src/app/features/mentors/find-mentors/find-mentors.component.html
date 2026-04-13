@@ -11,7 +11,7 @@
       <mat-icon class="search-icon">search</mat-icon>
       <input class="search-input" type="search" placeholder="Search by name, skill or bio…"
         [value]="searchTerm()"
-        (input)="searchTerm.set($any($event.target).value)" />
+        (input)="searchTerm.set($any($event.target).value); currentPage.set(1)" />
     </div>
     <button class="filters-btn" [class.filters-btn--active]="filtersOpen()" (click)="filtersOpen.set(!filtersOpen())">
       <mat-icon>tune</mat-icon>
@@ -88,7 +88,7 @@
   @if (!loading() && !apiError()) {
     <div class="results-bar">
       <span class="results-count">
-        Showing <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }}
+        Showing <strong>{{ paginatedMentors().length }}</strong> of <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }}
         @if (hasActiveFilters) { matching your criteria }
       </span>
       <div class="sort-wrap">
@@ -152,7 +152,7 @@
 
     <!-- ── Mentor Grid ── -->
     <div class="mentors-grid">
-      @for (m of filteredMentors(); track m.id) {
+      @for (m of paginatedMentors(); track m.id) {
         <div class="mentor-card">
 
           <!-- Avatar + badge -->
@@ -213,6 +213,34 @@
         </div>
       }
     </div>
+
+    <!-- ── Pagination ── -->
+    @if (totalPages() > 1) {
+      <div class="pagination-wrap">
+        <button mat-icon-button class="pagination-btn" [disabled]="currentPage() === 1" (click)="prevPage()" [attr.aria-label]="'Previous page'">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="pagination-pages">
+          @for (page of []; track $index) {}
+          @for (p of $pagination(totalPages()); track p) {
+            @if (Math.abs(p - currentPage()) <= 2 || p === 1 || p === totalPages()) {
+              <button class="pagination-page-btn" [class.active]="currentPage() === p" (click)="goToPage(p)">{{ p }}</button>
+            } @else if (p === currentPage() - 3 || p === currentPage() + 3) {
+              <span class="pagination-ellipsis">…</span>
+            }
+          }
+        </div>
+
+        <button mat-icon-button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()" [attr.aria-label]="'Next page'">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <span class="pagination-info">
+          Page <strong>{{ currentPage() }}</strong> of <strong>{{ totalPages() }}</strong>
+        </span>
+      </div>
+    }
 
   }
 

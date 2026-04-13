@@ -11,31 +11,47 @@ import { MentorResponse } from 'src/app/core/services/mentor.service';
 @Component({
   selector: 'app-mentor-approvals',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule, MatButtonModule, SkeletonComponent],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    SkeletonComponent,
+  ],
   templateUrl: './mentor-approvals.component.html',
   styleUrl: './mentor-approvals.component.scss',
 })
 export class MentorApprovalsComponent implements OnInit {
   private adminService = inject(AdminService);
 
-  mentors  = signal<MentorResponse[]>([]);
-  loading  = signal(true);
-  error    = signal(false);
+  mentors = signal<MentorResponse[]>([]);
+  loading = signal(true);
+  error = signal(false);
   actionInProgress = signal<number | null>(null);
   toastMsg = signal<string | null>(null);
 
-  pending  = computed(() => this.mentors().filter(m => m.status === 'PENDING'));
-  active   = computed(() => this.mentors().filter(m => m.status === 'ACTIVE'));
-  rejected = computed(() => this.mentors().filter(m => m.status === 'REJECTED'));
+  pending = computed(() =>
+    this.mentors().filter((m) => m.status === 'PENDING'),
+  );
+  active = computed(() => this.mentors().filter((m) => m.status === 'ACTIVE'));
+  rejected = computed(() =>
+    this.mentors().filter((m) => m.status === 'REJECTED'),
+  );
 
   ngOnInit() {
     this.adminService.getAllMentors().subscribe({
       next: (data: any) => {
-        const list: MentorResponse[] = Array.isArray(data) ? data : (data?.content ?? []);
+        const list: MentorResponse[] = Array.isArray(data)
+          ? data
+          : (data?.content ?? []);
         this.mentors.set(list);
         this.loading.set(false);
       },
-      error: () => { this.error.set(true); this.loading.set(false); },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
+      },
     });
   }
 
@@ -43,8 +59,10 @@ export class MentorApprovalsComponent implements OnInit {
     this.actionInProgress.set(mentor.id);
     this.adminService.approveMentor(mentor.id).subscribe({
       next: () => {
-        this.mentors.update(list =>
-          list.map(m => m.id === mentor.id ? { ...m, status: 'ACTIVE' } : m)
+        this.mentors.update((list) =>
+          list.map((m) =>
+            m.id === mentor.id ? { ...m, status: 'ACTIVE' } : m,
+          ),
         );
         this.showToast('Mentor approved successfully.');
         this.actionInProgress.set(null);
@@ -60,8 +78,10 @@ export class MentorApprovalsComponent implements OnInit {
     this.actionInProgress.set(mentor.id);
     this.adminService.rejectMentor(mentor.id).subscribe({
       next: () => {
-        this.mentors.update(list =>
-          list.map(m => m.id === mentor.id ? { ...m, status: 'REJECTED' } : m)
+        this.mentors.update((list) =>
+          list.map((m) =>
+            m.id === mentor.id ? { ...m, status: 'REJECTED' } : m,
+          ),
         );
         this.showToast('Mentor application rejected.');
         this.actionInProgress.set(null);
@@ -80,20 +100,31 @@ export class MentorApprovalsComponent implements OnInit {
 
   statusColor(status: string): string {
     const map: Record<string, string> = {
-      ACTIVE:   '#065f46', PENDING:  '#92400e', REJECTED: '#991b1b',
+      ACTIVE: '#065f46',
+      PENDING: '#92400e',
+      REJECTED: '#991b1b',
     };
     return map[status] ?? '#374151';
   }
 
   statusBg(status: string): string {
     const map: Record<string, string> = {
-      ACTIVE:   '#d1fae5', PENDING:  '#fef3c7', REJECTED: '#fee2e2',
+      ACTIVE: '#d1fae5',
+      PENDING: '#fef3c7',
+      REJECTED: '#fee2e2',
     };
     return map[status] ?? '#f3f4f6';
   }
 
   avatarColor(id: number): string {
-    const colors = ['#e53935', '#43a047', '#1e88e5', '#8e24aa', '#f9a825', '#0097a7'];
+    const colors = [
+      '#7c3aed',
+      '#ec4899',
+      '#06b6d4',
+      '#3b82f6',
+      '#22c55e',
+      '#f59e0b',
+    ];
     return colors[id % colors.length];
   }
 

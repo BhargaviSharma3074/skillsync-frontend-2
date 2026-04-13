@@ -20,8 +20,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fce4ec;
-  color: #dd0031;
+  background: var(--bg-secondary);
+  color: #7c3aed;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -106,7 +106,7 @@
 
   td {
     font-size: 0.875rem;
-    color: #334155;
+    color: var(--text-primary);
     padding: 0.875rem 1.5rem;
     border-bottom: 1px solid var(--hover-bg);
     vertical-align: middle;
@@ -139,7 +139,7 @@
 .user-display-name { font-weight: 600; color: var(--text-primary); }
 
 .username-cell { color: var(--text-secondary); font-size: 0.83rem; }
-.email-cell    { color: #475569; }
+.email-cell    { color: var(--text-secondary); }
 .date-cell     { color: var(--text-secondary); font-size: 0.83rem; white-space: nowrap; }
 
 /* ── Role Badge ──────────────────────────────────── */

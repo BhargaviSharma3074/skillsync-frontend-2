@@ -1,6 +1,12 @@
 import {
-  Component, Input, OnChanges, ElementRef, ViewChild,
-  AfterViewChecked, signal, inject
+  Component,
+  Input,
+  OnChanges,
+  ElementRef,
+  ViewChild,
+  AfterViewChecked,
+  signal,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +36,9 @@ export class GroupChatComponent implements OnChanges, AfterViewChecked {
   @ViewChild('messageList') messageList!: ElementRef<HTMLDivElement>;
 
   private authService = inject(AuthService);
-  get me() { return this.authService.currentUser!; }
+  get me() {
+    return this.authService.currentUser!;
+  }
 
   messages = signal<ChatMessage[]>([]);
   inputText = '';
@@ -61,7 +69,7 @@ export class GroupChatComponent implements OnChanges, AfterViewChecked {
       sentAt: new Date(),
     };
 
-    this.messages.update(list => [...list, msg]);
+    this.messages.update((list) => [...list, msg]);
     this.inputText = '';
     this.shouldScroll = true;
   }
@@ -73,18 +81,30 @@ export class GroupChatComponent implements OnChanges, AfterViewChecked {
     }
   }
 
-  isMine(msg: ChatMessage) { return msg.senderId === this.me.id; }
+  isMine(msg: ChatMessage) {
+    return msg.senderId === this.me.id;
+  }
 
   initials(name: string) {
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    return name
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   }
 
   avatarColor(id: number) {
-    return ['#e53935','#43a047','#1e88e5','#8e24aa','#f59e0b','#00897b'][id % 6];
+    return ['#7c3aed', '#ec4899', '#06b6d4', '#3b82f6', '#22c55e', '#f59e0b'][
+      id % 6
+    ];
   }
 
   formatTime(date: Date) {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   }
 
   showDateDivider(index: number): boolean {
@@ -100,7 +120,11 @@ export class GroupChatComponent implements OnChanges, AfterViewChecked {
     yesterday.setDate(today.getDate() - 1);
     if (date.toDateString() === today.toDateString()) return 'Today';
     if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
-    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
   }
 
   private scrollToBottom() {
@@ -114,12 +138,52 @@ export class GroupChatComponent implements OnChanges, AfterViewChecked {
     const now = new Date();
     const d = (mins: number) => new Date(now.getTime() - mins * 60 * 1000);
     return [
-      { id: 1, senderId: 99, senderName: 'Alice Roy',    content: 'Hey everyone! Welcome to the group 👋',      sentAt: d(120) },
-      { id: 2, senderId: 88, senderName: 'Ben Kumar',    content: 'Thanks for creating this! Really needed a place to discuss Angular.',  sentAt: d(118) },
-      { id: 3, senderId: 99, senderName: 'Alice Roy',    content: 'Absolutely. Feel free to share resources and ask questions anytime.', sentAt: d(115) },
-      { id: 4, senderId: 77, senderName: 'Priya Singh',  content: 'Quick question — anyone tried Angular signals with WebSocket yet?', sentAt: d(60) },
-      { id: 5, senderId: 88, senderName: 'Ben Kumar',    content: 'Yes! I wrote a small service for it. Will share the code later.',     sentAt: d(58) },
-      { id: 6, senderId: 77, senderName: 'Priya Singh',  content: 'That would be amazing, thanks Ben!',         sentAt: d(55) },
+      {
+        id: 1,
+        senderId: 99,
+        senderName: 'Alice Roy',
+        content: 'Hey everyone! Welcome to the group 👋',
+        sentAt: d(120),
+      },
+      {
+        id: 2,
+        senderId: 88,
+        senderName: 'Ben Kumar',
+        content:
+          'Thanks for creating this! Really needed a place to discuss Angular.',
+        sentAt: d(118),
+      },
+      {
+        id: 3,
+        senderId: 99,
+        senderName: 'Alice Roy',
+        content:
+          'Absolutely. Feel free to share resources and ask questions anytime.',
+        sentAt: d(115),
+      },
+      {
+        id: 4,
+        senderId: 77,
+        senderName: 'Priya Singh',
+        content:
+          'Quick question — anyone tried Angular signals with WebSocket yet?',
+        sentAt: d(60),
+      },
+      {
+        id: 5,
+        senderId: 88,
+        senderName: 'Ben Kumar',
+        content:
+          'Yes! I wrote a small service for it. Will share the code later.',
+        sentAt: d(58),
+      },
+      {
+        id: 6,
+        senderId: 77,
+        senderName: 'Priya Singh',
+        content: 'That would be amazing, thanks Ben!',
+        sentAt: d(55),
+      },
     ];
   }
 }

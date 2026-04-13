@@ -102,17 +102,30 @@
                 {{ learnerInitials(r.learnerId) }}
               </div>
               <div class="req-info">
-                <div class="req-learner">Learner #{{ r.learnerId }}</div>
+                <div class="req-learner">{{ getLearnerName(r.learnerId) }}</div>
                 <div class="req-topic">{{ r.topic || 'No topic specified' }}</div>
+                @if (isSessionRescheduled(r)) {
+                  <div style="color: #f59e0b; display: flex; align-items: center; gap: 6px; font-size: 12px; margin-top: 4px">
+                    <mat-icon style="font-size: 14px; width: 14px; height: 14px">update</mat-icon>
+                    Rescheduled to: {{ formatDate(r.rescheduledSessionDate!) }}
+                  </div>
+                }
                 <div class="req-date">
-                  <mat-icon>schedule</mat-icon> {{ formatDate(r.sessionDate) }}
+                  <mat-icon>schedule</mat-icon> {{ formatDate(r.rescheduledSessionDate || r.sessionDate) }}
                 </div>
               </div>
             </div>
             <div class="req-actions">
-              <button mat-flat-button class="accept-btn" (click)="accept(r.id)">
-                <mat-icon>check</mat-icon> Accept
-              </button>
+              @if (canAccept(r)) {
+                <button mat-flat-button class="accept-btn" (click)="accept(r.id)">
+                  <mat-icon>check</mat-icon> Accept
+                </button>
+              }
+              @if (shouldShowReschedule(r)) {
+                <button mat-flat-button class="reschedule-btn" style="background-color: #f59e0b; color: white" (click)="openRescheduleDialog(r)">
+                  <mat-icon>update</mat-icon> Reschedule
+                </button>
+              }
               <button mat-stroked-button class="decline-btn" (click)="reject(r.id)">
                 <mat-icon>close</mat-icon> Decline
               </button>
@@ -149,7 +162,7 @@
                 {{ learnerInitials(r.userId) }}
               </div>
               <div class="review-meta">
-                <span class="reviewer-name">User #{{ r.userId }}</span>
+                <span class="reviewer-name">{{ getLearnerName(r.userId) }}</span>
                 <span class="review-date">{{ formatDate(r.createdAt) }}</span>
               </div>
             </div>

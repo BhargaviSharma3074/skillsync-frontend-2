@@ -17,23 +17,23 @@
   gap: 1rem;
 }
 
-.page-title { font-size: 1.75rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem; }
-.page-sub   { font-size: 0.95rem; color: #64748b; margin: 0; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.95rem; color: var(--text-secondary); margin: 0; }
 
 .unread-count {
   font-weight: 600;
-  color: #dd0031; /* Brand highlight color */
+  color: #7c3aed; /* Brand highlight color */
 }
 
 .mark-all-btn {
   height: 38px !important;
   border-radius: 8px !important;
   font-size: 0.85rem !important;
-  color: #475569 !important;
-  border-color: #cbd5e1 !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
 
-  mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; margin-right: 4px; color: #64748b; }
-  &:hover { background: #f8fafc; color: #0f172a !important; }
+  mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; margin-right: 4px; color: var(--text-secondary); }
+  &:hover { background: var(--bg-secondary); color: var(--text-primary) !important; }
 }
 
 /* ── Notification List ───────────────────────────── */
@@ -47,8 +47,8 @@
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.25rem;
   cursor: pointer;
@@ -59,18 +59,18 @@
   /* Subtle slide up and shadow on hover */
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    border-color: #cbd5e1;
+    border-color: var(--border-color);
     transform: translateY(-1px);
   }
 
   /* Unread State Styling */
   &--unread {
-    background: #f8fafc;
-    border-color: #cbd5e1;
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
 
     .notif-message {
       font-weight: 600;
-      color: #0f172a;
+      color: var(--text-primary);
     }
   }
 }
@@ -79,9 +79,9 @@
 .notif-icon {
   width: 48px;
   height: 48px;
-  border-radius: 14px; /* Squircle */
-  background: #f1f5f9;
-  color: #64748b;
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,8 +91,8 @@
   mat-icon { font-size: 1.4rem; width: 1.4rem; height: 1.4rem; }
 
   &--unread {
-    background: #e0e7ff; /* Soft indigo background */
-    color: #4f46e5;      /* Deep indigo icon */
+    background: #e0e7ff;
+    color: #4f46e5;
   }
 }
 
@@ -107,14 +107,14 @@
 
 .notif-message {
   font-size: 0.95rem;
-  color: #334155;
+  color: var(--text-primary);
   line-height: 1.5;
   margin: 0;
 }
 
 .notif-time {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-tertiary);
   font-weight: 500;
 }
 
@@ -141,13 +141,13 @@
 
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
-  padding: 5rem 2rem; color: #64748b; text-align: center; gap: 1rem;
-  background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1;
+  padding: 5rem 2rem; color: var(--text-secondary); text-align: center; gap: 1rem;
+  background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--border-color);
 
   .empty-icon-wrapper {
     width: 64px; height: 64px; border-radius: 50%;
-    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
-    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #94a3b8; }
+    background: var(--bg-secondary); display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: var(--text-tertiary); }
   }
 
   p { margin: 0; font-size: 0.95rem; font-weight: 500; }

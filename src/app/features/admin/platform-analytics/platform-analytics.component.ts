@@ -22,26 +22,30 @@ export class PlatformAnalyticsComponent implements OnInit {
   totalUsersCount = signal(0);
   loading = signal(true);
 
-  mentorUserIds = computed(() => new Set(this.mentors().map(m => m.userId)));
+  mentorUserIds = computed(() => new Set(this.mentors().map((m) => m.userId)));
 
   // User metrics
   totalUsers = computed(() => this.totalUsersCount());
   learnerCount = computed(
-    () => this.users().filter((u) => {
-      const r = (u.role || '').toUpperCase();
-      const isMentor = this.mentorUserIds().has(u.id) || r.includes('MENTOR');
-      const isAdmin = r.includes('ADMIN');
-      return !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
-    }).length,
+    () =>
+      this.users().filter((u) => {
+        const r = (u.role || '').toUpperCase();
+        const isMentor = this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+        const isAdmin = r.includes('ADMIN');
+        return !isMentor && !isAdmin && (r.includes('LEARNER') || r === '');
+      }).length,
   );
   mentorCount = computed(
-    () => this.users().filter((u) => {
-      const r = (u.role || '').toUpperCase();
-      return this.mentorUserIds().has(u.id) || r.includes('MENTOR');
-    }).length,
+    () =>
+      this.users().filter((u) => {
+        const r = (u.role || '').toUpperCase();
+        return this.mentorUserIds().has(u.id) || r.includes('MENTOR');
+      }).length,
   );
   adminCount = computed(
-    () => this.users().filter((u) => (u.role || '').toUpperCase().includes('ADMIN')).length,
+    () =>
+      this.users().filter((u) => (u.role || '').toUpperCase().includes('ADMIN'))
+        .length,
   );
 
   // Mentor metrics
@@ -116,8 +120,8 @@ export class PlatformAnalyticsComponent implements OnInit {
       label: 'Active Mentors',
       value: this.activeMentors(),
       icon: 'psychology',
-      color: '#34a853',
-      bg: '#e6f4ea',
+      color: '#7c3aed',
+      bg: '#ede9fe',
     },
     {
       label: 'Avg Rating',
@@ -137,15 +141,15 @@ export class PlatformAnalyticsComponent implements OnInit {
       label: 'Pending Approvals',
       value: this.pendingMentors(),
       icon: 'pending',
-      color: '#dd0031',
-      bg: '#fce4ec',
+      color: '#ec4899',
+      bg: '#fce7f3',
     },
     {
       label: 'Avg Hourly Rate',
       value: '₹' + this.avgHourlyRate().toFixed(0),
       icon: 'payments',
-      color: '#0097a7',
-      bg: '#e0f7fa',
+      color: '#06b6d4',
+      bg: '#cffafe',
     },
   ]);
 

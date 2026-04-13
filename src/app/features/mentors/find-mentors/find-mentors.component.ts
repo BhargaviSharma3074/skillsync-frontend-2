@@ -58,6 +58,9 @@ export class FindMentorsComponent implements OnInit {
   searchTerm = signal('');
   filtersOpen = signal(false);
 
+  currentPage = signal(1);
+  pageSize = signal(12);
+
   filteredMentors = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
     if (!term) return this.mentors();
@@ -71,6 +74,18 @@ export class FindMentorsComponent implements OnInit {
         m.skills?.some((s) => s.toLowerCase().includes(term))
       );
     });
+  });
+
+  totalPages = computed(() => {
+    const total = this.filteredMentors().length;
+    const size = this.pageSize();
+    return Math.ceil(total / size);
+  });
+
+  paginatedMentors = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    const end = start + this.pageSize();
+    return this.filteredMentors().slice(start, end);
   });
 
   get hasActiveFilters() {
@@ -125,6 +140,7 @@ export class FindMentorsComponent implements OnInit {
 
   applyFilters() {
     this.filtersOpen.set(false);
+    this.currentPage.set(1);
     this.loadMentors();
   }
 
@@ -135,6 +151,7 @@ export class FindMentorsComponent implements OnInit {
     this.searchTerm.set('');
     this.filters.set({ sortBy: 'rating' });
     this.filtersOpen.set(false);
+    this.currentPage.set(1);
     this.loadMentors();
   }
 
@@ -142,12 +159,32 @@ export class FindMentorsComponent implements OnInit {
     if (type === 'skill') this.selectedSkillId.set(null);
     if (type === 'rating') this.minRating.set(null);
     if (type === 'rate') this.maxRate.set(null);
+    this.currentPage.set(1);
     this.loadMentors();
   }
 
   updateSort(value: string) {
     this.filters.update((f) => ({ ...f, sortBy: value as any }));
+    this.currentPage.set(1);
     this.loadMentors();
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update((p) => p + 1);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((p) => p - 1);
+    }
   }
 
   skillName(id: number): string {
@@ -172,12 +209,12 @@ export class FindMentorsComponent implements OnInit {
 
   avatarColor(mentor: MentorResponse): string {
     const colors = [
-      '#e53935',
-      '#43a047',
-      '#1e88e5',
-      '#8e24aa',
-      '#f9a825',
-      '#00897b',
+      '#7c3aed',
+      '#ec4899',
+      '#06b6d4',
+      '#3b82f6',
+      '#22c55e',
+      '#f43f5e',
     ];
     return colors[mentor.id % colors.length];
   }
@@ -185,4 +222,14 @@ export class FindMentorsComponent implements OnInit {
   stars(rating: number) {
     return Array.from({ length: 5 }, (_, i) => i < Math.round(rating));
   }
+
+  Math = Math;
+
+  $pagination = (totalPages: number): number[] => {
+    const pages: number[] = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 }

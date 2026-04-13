@@ -152,8 +152,8 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 
   &--mine {
-    background: #dd0031;
-    border-color: #dd0031;
+    background: #7c3aed;
+    border-color: #7c3aed;
     border-radius: 16px 16px 4px 16px;
     box-shadow: 0 2px 8px rgba(221,0,49,0.2);
 
@@ -220,7 +220,7 @@
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   transition: border-color 0.15s;
 
-  &:focus-within { border-color: #dd0031; }
+  &:focus-within { border-color: #7c3aed; }
 }
 
 .chat-input {
@@ -245,7 +245,7 @@
   height: 38px;
   border-radius: 10px;
   border: none;
-  background: #dd0031;
+  background: #7c3aed;
   color: #fff;
   display: flex;
   align-items: center;

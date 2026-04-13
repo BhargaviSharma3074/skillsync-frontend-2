@@ -7,8 +7,8 @@
 }
 
 .page-header { margin-bottom: 1.5rem; }
-.page-title { font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem; }
-.page-sub   { font-size: 0.9rem; color: #6b7280; margin: 0; }
+.page-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem; }
+.page-sub   { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 /* ── Modern Segmented Tabs ───────────────────────── */
 .tabs-container {
@@ -17,7 +17,7 @@
 
 .tabs {
   display: inline-flex;
-  background: #f3f4f6;
+  background: var(--bg-secondary);
   padding: 4px;
   border-radius: 10px;
   gap: 4px;
@@ -29,16 +29,16 @@
   font-weight: 500;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: var(--text-secondary);
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.2s ease;
 
-  &:hover:not(.tab--active) { color: #374151; background: rgba(0,0,0,0.03); }
+  &:hover:not(.tab--active) { color: var(--text-primary); background: var(--hover-bg); }
 
   &--active {
-    background: #fff;
-    color: #111827;
+    background: var(--card-bg);
+    color: var(--text-primary);
     font-weight: 600;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
@@ -55,15 +55,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.25rem;
   gap: 1.5rem;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: var(--text-tertiary);
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     transform: translateY(-1px);
   }
@@ -93,13 +93,13 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #f8fafc;
-  color: #64748b;
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
 
   mat-icon { font-size: 1.5rem; width: 1.5rem; height: 1.5rem; }
 
@@ -142,7 +142,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #dd0031;
+  background: #7c3aed;
   color: white;
   font-size: 0.65rem;
   font-weight: 700;
@@ -163,7 +163,7 @@
 .session-title {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -182,12 +182,12 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 
   mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
 }
 
-.divider { color: #d1d5db; }
+.divider { color: var(--border-color); }
 
 /* Right Side: Badges & Actions */
 .session-actions {
@@ -230,12 +230,12 @@
 
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
-  padding: 5rem 2rem; color: #6b7280; text-align: center; gap: 1rem;
+  padding: 5rem 2rem; color: var(--text-secondary); text-align: center; gap: 1rem;
 
   .empty-icon-wrapper {
     width: 64px; height: 64px; border-radius: 50%;
-    background: #f3f4f6; display: flex; align-items: center; justify-content: center;
-    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #9ca3af; }
+    background: var(--bg-secondary); display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: var(--text-tertiary); }
   }
 
   p { margin: 0; font-size: 0.95rem; font-weight: 500; }
@@ -252,7 +252,7 @@
   .session-actions {
     width: 100%;
     justify-content: space-between; /* Push badge to left, buttons to right */
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid var(--border-color);
     padding-top: 1rem;
   }
 

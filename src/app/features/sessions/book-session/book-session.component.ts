@@ -197,7 +197,7 @@ export class BookSessionComponent implements OnInit {
               this.currentStep.set('cancelled');
             },
           },
-          theme: { color: '#dd0031' },
+          theme: { color: '#7c3aed' },
         };
         const rzp = new Razorpay(options);
         rzp.open();
@@ -238,7 +238,15 @@ export class BookSessionComponent implements OnInit {
     return `M${m.id}`.slice(0, 2).toUpperCase();
   }
   mentorColor(m: MentorResponse) {
-    const colors = ['#e53935', '#43a047', '#1e88e5', '#8e24aa', '#f9a825'];
+    const colors = [
+      '#7c3aed',
+      '#ec4899',
+      '#06b6d4',
+      '#3b82f6',
+      '#22c55e',
+      '#f59e0b',
+      '#f43f5e',
+    ];
     return colors[m.id % colors.length];
   }
   stars(rating: number) {

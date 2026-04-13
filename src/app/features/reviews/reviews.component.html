@@ -43,7 +43,7 @@
                   <mat-icon>check_circle</mat-icon>
                 </div>
                 <div>
-                  <div class="s-mentor">Mentor #{{ s.mentorId }}</div>
+                  <div class="s-mentor">Mentor: {{ getMentorName(s.mentorId) }}</div>
                   <div class="s-date">{{ formatDate(s.sessionDate) }} <span class="dot-divider">•</span> {{ s.topic || 'Session' }}</div>
                 </div>
               </div>
@@ -122,7 +122,7 @@
                 {{ learnerInitials(r.userId) }}
               </div>
               <div class="reviewer-info">
-                <div class="reviewer-name">Learner #{{ r.userId }}</div>
+                <div class="reviewer-name">{{ getLearnerName(r.userId) }}</div>
                 <div class="review-date">{{ formatDate(r.createdAt) }}</div>
               </div>
             </div>

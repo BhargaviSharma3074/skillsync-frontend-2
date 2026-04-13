@@ -13,6 +13,7 @@ export interface SessionResponse {
   mentorId: number;
   learnerId: number;
   sessionDate: string; // ISO format: YYYY-MM-DDTHH:mm:ss
+  rescheduledSessionDate?: string; // New/rescheduled time if mentor rescheduled
   status: SessionStatus;
   topic: string;
   duration?: number;
@@ -81,5 +82,12 @@ export class SessionService {
    */
   getSessionById(sessionId: number): Observable<SessionResponse> {
     return this.http.get<SessionResponse>(`${this.baseUrl}/sessions/${sessionId}`);
+  }
+
+  /**
+   * Reschedule a session to a new date/time
+   */
+  reschedule(sessionId: number, newSessionDate: string): Observable<SessionResponse> {
+    return this.http.put<SessionResponse>(`${this.baseUrl}/sessions/${sessionId}/reschedule`, { newSessionDate });
   }
 }

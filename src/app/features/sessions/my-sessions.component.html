@@ -81,15 +81,22 @@
                 </p>
               }
 
+              @if (isSessionRescheduled(s)) {
+                <p style="color: #f59e0b; display: flex; align-items: center; gap: 8px; margin-top: 6px">
+                  <mat-icon style="font-size: 16px; width: 16px; height: 16px">update</mat-icon>
+                  <strong>Rescheduled to:</strong> {{ formatDate(s.rescheduledSessionDate!) }}
+                </p>
+              }
+
               <div class="session-meta">
                 <span class="meta-item">
                   <mat-icon>calendar_today</mat-icon>
-                  {{ formatDate(s.sessionDate) }}
+                  {{ formatDate(s.rescheduledSessionDate || s.sessionDate) }}
                 </span>
                 <span class="meta-item divider">•</span>
                 <span class="meta-item">
                   <mat-icon>badge</mat-icon>
-                  {{ isLearner ? 'Mentor' : 'Learner' }} #{{ isLearner ? s.mentorId : s.learnerId }}
+                  {{ isLearner ? 'Mentor' : 'Learner' }}: {{ getDisplayName(isLearner ? s.mentorId : s.learnerId) }}
                 </span>
               </div>
             </div>
@@ -105,6 +112,11 @@
             <div class="action-buttons">
               @if (canAccept(s)) {
                 <button mat-flat-button color="primary" class="action-btn" (click)="accept(s.id)">Accept</button>
+              }
+              @if (shouldShowReschedule(s)) {
+                <button mat-flat-button class="action-btn" style="background-color: #f59e0b; color: white" (click)="openRescheduleDialog(s)">
+                  <mat-icon>update</mat-icon> Reschedule
+                </button>
               }
               @if (canComplete(s)) {
                 <button mat-flat-button color="primary" class="action-btn" (click)="complete(s.id)">Complete</button>

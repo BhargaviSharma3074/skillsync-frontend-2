@@ -1,10 +1,10 @@
 @import '@angular/material/prebuilt-themes/rose-red.css';
 
 :root {
-  --mat-sys-primary: #DD0031;
+  --mat-sys-primary: #7c3aed;
   --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #ffd9dc;
-  --mat-sys-on-primary-container: #400010;
+  --mat-sys-primary-container: #f5f3ff;
+  --mat-sys-on-primary-container: #5b21b6;
 
   /* Light Theme Colors */
   --bg-primary: #ffffff;
@@ -27,6 +27,9 @@
   
   --hover-bg: #f1f5f9;
   --hover-bg-dark: #f8fafc;
+  
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
 }
 
 [data-theme="dark"] {
@@ -50,6 +53,9 @@
   
   --hover-bg: #2a3441;
   --hover-bg-dark: #334155;
+  
+  --error-bg: #7f1d1d;
+  --error-border: #991b1b;
 }
 
 *, *::before, *::after {

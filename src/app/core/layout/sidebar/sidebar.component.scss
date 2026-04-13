@@ -23,14 +23,14 @@
 }
 
 .logo-icon {
-  color: #f59e0b;
+  color: #5926aa;
   font-size: 1.75rem;
   width: 1.75rem;
   height: 1.75rem;
 }
 
 .logo-skill { color: #ffffff; }
-.logo-sync  { color: #f59e0b; }
+.logo-sync  { color: #5926aa; }
 
 /* ── Layout Wrappers ──────────────────────────────── */
 .sidebar-scroll-area {
@@ -83,10 +83,10 @@
 
   &--active {
     background: rgba(221, 0, 49, 0.1);
-    color: #ff4d6d;
+    color: #a855f7;
     font-weight: 600;
 
-    .nav-icon { color: #ff4d6d; }
+    .nav-icon { color: #a855f7; }
 
     /* Modern left-bar indicator */
     &::before {
@@ -96,7 +96,7 @@
       top: 15%;
       height: 70%;
       width: 3px;
-      background: #ff4d6d;
+      background: #a855f7;
       border-radius: 0 4px 4px 0;
     }
 

@@ -1,8 +1,8 @@
 @use '@angular/material' as mat;
 
-$brand-red: #DD0031;
-$brand-red-dark: #9a0019;
-$brand-red-light: #fff0f3;
+$brand-red: #7c3aed;
+$brand-red-dark: #5b21b6;
+$brand-red-light: #f5f3ff;
 $dark-navy: #0d1b2a;
 $text-dark: #0f172a;
 $text-muted: #475569;
@@ -23,7 +23,7 @@ $text-muted: #475569;
 
 /* ── Logo shared ─────────────────────────────────── */
 .logo-skill { color: white; font-weight: 800; }
-.logo-sync  { color: #f59e0b; font-weight: 800; }
+.logo-sync  { color: #ec4899; font-weight: 800; }
 
 /* ── Navbar ─────────────────────────────────────── */
 .navbar {
