@@ -1,12 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface MentorResponse {
   id: number;
   userId: number;
-  name?: string;
-  username?: string;
   bio: string;
   experience: number;
   rating: number;
@@ -32,22 +31,33 @@ export interface MentorApplyResponse {
   skillIds: number[];
 }
 
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number; // 0-indexed current page
+  size: number;
+  first: boolean;
+  last: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MentorService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://skillsync.mooo.com/api';
+  private baseUrl = environment.apiUrl;
 
-  getAll(filters?: MentorFilters, pageSize: number = 12): Observable<any> {
-    let params = new HttpParams();
+  getAll(
+    filters?: MentorFilters,
+    page = 0,
+    size = 12,
+  ): Observable<Page<MentorResponse>> {
+    let params = new HttpParams().set('page', page).set('size', size);
     if (filters?.skillId) params = params.set('skillId', filters.skillId);
     if (filters?.minRating) params = params.set('minRating', filters.minRating);
     if (filters?.maxRate) params = params.set('maxRate', filters.maxRate);
     if (filters?.minExp) params = params.set('minExp', filters.minExp);
     if (filters?.sortBy) params = params.set('sortBy', filters.sortBy);
-    // Add pagination parameters
-    params = params.set('page', '0');
-    params = params.set('size', pageSize.toString());
-    return this.http.get<any>(`${this.baseUrl}/mentors`, {
+    return this.http.get<Page<MentorResponse>>(`${this.baseUrl}/mentors`, {
       params,
     });
   }
@@ -56,10 +66,17 @@ export class MentorService {
     return this.http.get<MentorResponse>(`${this.baseUrl}/mentors/${id}`);
   }
 
-  applyMentor(paylod: MentorApplyResponse): Observable<MentorApplyResponse> {
+  applyMentor(payload: MentorApplyResponse): Observable<MentorApplyResponse> {
     return this.http.post<MentorApplyResponse>(
       `${this.baseUrl}/mentors/apply`,
-      paylod,
+      payload,
+    );
+  }
+
+  updateAvailability(id: number, slots: string[]): Observable<MentorResponse> {
+    return this.http.put<MentorResponse>(
+      `${this.baseUrl}/mentors/${id}/availability`,
+      { schedule: slots.join(',') },
     );
   }
 }

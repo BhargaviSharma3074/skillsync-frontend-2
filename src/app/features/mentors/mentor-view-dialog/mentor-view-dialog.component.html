@@ -1,0 +1,115 @@
+<div class="dialog-shell">
+
+  <!-- ── Hero Banner ── -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <button class="close-btn" mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="hero-content">
+      @if (user?.profilePictureUrl) {
+        <img class="avatar avatar--img" [src]="user!.profilePictureUrl!" [alt]="user?.name ?? 'Mentor'" />
+      } @else {
+        <div class="avatar" [style.background]="data.avatarColor">{{ data.initials }}</div>
+      }
+
+      <div class="hero-info">
+        <h2 class="mentor-name">{{ user?.name ?? 'Mentor' }}</h2>
+        <div class="mentor-tagline">
+          <mat-icon>work_outline</mat-icon>
+          {{ mentor.experience }} {{ mentor.experience === 1 ? 'year' : 'years' }} of experience
+        </div>
+        <div class="hero-badges">
+          <span class="badge" [class.badge--available]="isAvailable" [class.badge--unavailable]="!isAvailable">
+            <span class="avail-dot"></span>
+            {{ isAvailable ? 'Available' : 'Not Available' }}
+          </span>
+          @if (mentor.reviewCount > 0) {
+            <span class="badge badge--reviews">
+              <mat-icon>rate_review</mat-icon>
+              {{ mentor.reviewCount }} review{{ mentor.reviewCount !== 1 ? 's' : '' }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Body ── -->
+  <div class="body">
+
+    <!-- Rating + Rate row -->
+    <div class="stats-row">
+      <div class="stat-pill">
+        <div class="stars">
+          @for (filled of stars(mentor.rating); track $index) {
+            <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+          }
+        </div>
+        <span class="stat-val">{{ mentor.rating | number:'1.1-1' }}</span>
+        <span class="stat-label">Rating</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-pill">
+        <mat-icon class="stat-icon stat-icon--rate">currency_rupee</mat-icon>
+        <span class="stat-val">{{ mentor.hourlyRate | number:'1.0-0' }}</span>
+        <span class="stat-label">/ hour</span>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-pill">
+        <mat-icon class="stat-icon stat-icon--sessions">event_available</mat-icon>
+        <span class="stat-val">{{ mentor.experience }}</span>
+        <span class="stat-label">Yrs Exp</span>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    @if (mentor.bio) {
+      <div class="section">
+        <div class="section-label">
+          <mat-icon>person</mat-icon>
+          About
+        </div>
+        <p class="bio-text">{{ mentor.bio }}</p>
+      </div>
+    }
+
+    <!-- Skills -->
+    @if (mentor.skills?.length) {
+      <div class="section">
+        <div class="section-label">
+          <mat-icon>psychology</mat-icon>
+          Skills & Expertise
+        </div>
+        <div class="skill-chips">
+          @for (skill of mentor.skills; track skill) {
+            <span class="skill-chip">{{ skill }}</span>
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+
+  <!-- ── Footer Actions ── -->
+  <div class="dialog-footer">
+    <button mat-stroked-button class="cancel-btn" (click)="close()">Cancel</button>
+    @if (isAvailable) {
+      <button mat-flat-button class="book-btn" (click)="book()">
+        <mat-icon>calendar_today</mat-icon>
+        Book a Session
+      </button>
+    } @else {
+      <button mat-flat-button class="book-btn book-btn--disabled" disabled>
+        <mat-icon>event_busy</mat-icon>
+        Not Accepting Sessions
+      </button>
+    }
+  </div>
+
+</div>

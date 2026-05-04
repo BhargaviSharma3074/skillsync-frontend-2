@@ -9,9 +9,8 @@
   <div class="search-row">
     <div class="search-wrap">
       <mat-icon class="search-icon">search</mat-icon>
-      <input class="search-input" type="search" placeholder="Search by name, skill or bio…"
-        [value]="searchTerm()"
-        (input)="searchTerm.set($any($event.target).value); currentPage.set(1)" />
+      <input class="search-input" type="search" placeholder="Search by name, skill or bio…" [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)" />
     </div>
     <button class="filters-btn" [class.filters-btn--active]="filtersOpen()" (click)="filtersOpen.set(!filtersOpen())">
       <mat-icon>tune</mat-icon>
@@ -22,225 +21,225 @@
 
   <!-- ── Active Filter Chips ── -->
   @if (hasActiveFilters) {
-    <div class="chips-row">
-      @if (selectedSkillId()) {
-        <span class="chip-active">
-          {{ skillName(selectedSkillId()!) }}
-          <button class="chip-x" (click)="removeFilter('skill')">×</button>
-        </span>
-      }
-      @if (minRating()) {
-        <span class="chip-active">
-          ★ {{ minRating() }}+
-          <button class="chip-x" (click)="removeFilter('rating')">×</button>
-        </span>
-      }
-      @if (maxRate()) {
-        <span class="chip-active">
-          &lt; ₹{{ maxRate() | number:'1.0-0' }}/hr
-          <button class="chip-x" (click)="removeFilter('rate')">×</button>
-        </span>
-      }
-      <button class="clear-all-btn" (click)="clearFilters()">Clear All</button>
-    </div>
+  <div class="chips-row">
+    @if (selectedSkillId()) {
+    <span class="chip-active">
+      {{ skillName(selectedSkillId()!) }}
+      <button class="chip-x" (click)="removeFilter('skill')">×</button>
+    </span>
+    }
+    @if (minRating()) {
+    <span class="chip-active">
+      ★ {{ minRating() }}+
+      <button class="chip-x" (click)="removeFilter('rating')">×</button>
+    </span>
+    }
+    @if (maxRate()) {
+    <span class="chip-active">
+      &lt; ₹{{ maxRate() | number:'1.0-0' }}/hr
+      <button class="chip-x" (click)="removeFilter('rate')">×</button>
+    </span>
+    }
+    <button class="clear-all-btn" (click)="clearFilters()">Clear All</button>
+  </div>
   }
 
   <!-- ── Expanded Filter Panel ── -->
   @if (filtersOpen()) {
-    <div class="filter-panel">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
-        <mat-label>Skill</mat-label>
-        <mat-icon matPrefix>code</mat-icon>
-        <mat-select [value]="selectedSkillId()" (valueChange)="selectedSkillId.set($event)">
-          <mat-option [value]="null">All Skills</mat-option>
-          @for (s of skills(); track s.id) {
-            <mat-option [value]="s.id">{{ s.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+  <div class="filter-panel">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
+      <mat-label>Skill</mat-label>
+      <mat-icon matPrefix>code</mat-icon>
+      <mat-select [value]="selectedSkillId()" (valueChange)="selectedSkillId.set($event)">
+        <mat-option [value]="null">All Skills</mat-option>
+        @for (s of skills(); track s.id) {
+        <mat-option [value]="s.id">{{ s.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
-        <mat-label>Min Rating</mat-label>
-        <mat-icon matPrefix>star</mat-icon>
-        <mat-select [value]="minRating()" (valueChange)="minRating.set($event)">
-          <mat-option [value]="null">Any Rating</mat-option>
-          <mat-option [value]="3">3+ Stars</mat-option>
-          <mat-option [value]="4">4+ Stars</mat-option>
-          <mat-option [value]="4.5">4.5+ Stars</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
+      <mat-label>Min Rating</mat-label>
+      <mat-icon matPrefix>star</mat-icon>
+      <mat-select [value]="minRating()" (valueChange)="minRating.set($event)">
+        <mat-option [value]="null">Any Rating</mat-option>
+        <mat-option [value]="3">3+ Stars</mat-option>
+        <mat-option [value]="4">4+ Stars</mat-option>
+        <mat-option [value]="4.5">4.5+ Stars</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
-        <mat-label>Max Hourly Rate (₹)</mat-label>
-        <mat-icon matPrefix>currency_rupee</mat-icon>
-        <input matInput type="number" min="0" placeholder="e.g. 2000"
-          [value]="maxRate()"
-          (input)="maxRate.set(+$any($event.target).value || null)" />
-      </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-field">
+      <mat-label>Max Hourly Rate (₹)</mat-label>
+      <mat-icon matPrefix>currency_rupee</mat-icon>
+      <input matInput type="number" min="0" placeholder="e.g. 2000" [value]="maxRate()"
+        (input)="maxRate.set(+$any($event.target).value || null)" />
+    </mat-form-field>
 
-      <button mat-flat-button color="primary" class="apply-btn" (click)="applyFilters()">
-        Apply
-      </button>
-    </div>
+    <button mat-flat-button color="primary" class="apply-btn" (click)="applyFilters()">
+      Apply
+    </button>
+  </div>
   }
 
   <!-- ── Results Header ── -->
   @if (!loading() && !apiError()) {
-    <div class="results-bar">
-      <span class="results-count">
-        Showing <strong>{{ paginatedMentors().length }}</strong> of <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }}
-        @if (hasActiveFilters) { matching your criteria }
-      </span>
-      <div class="sort-wrap">
-        <mat-icon class="sort-icon">sort</mat-icon>
-        <select class="sort-select"
-          [value]="filters().sortBy"
-          (change)="updateSort($any($event.target).value)">
-          <option value="rating">Most Relevant</option>
-          <option value="rate_asc">Rate: Low → High</option>
-          <option value="rate_desc">Rate: High → Low</option>
-          <option value="experience">Most Experienced</option>
-        </select>
-      </div>
+  <div class="results-bar">
+    <span class="results-count">
+      Showing <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }}
+      @if (hasActiveFilters) { matching your criteria }
+    </span>
+    <div class="sort-wrap">
+      <mat-icon class="sort-icon">sort</mat-icon>
+      <select class="sort-select" [value]="filters().sortBy" (change)="updateSort($any($event.target).value)">
+        <option value="rating">Most Relevant</option>
+        <option value="rate_asc">Rate: Low → High</option>
+        <option value="rate_desc">Rate: High → Low</option>
+        <option value="experience">Most Experienced</option>
+      </select>
     </div>
+  </div>
   }
 
   <!-- ── States ── -->
   @if (loading()) {
-    <div class="mentors-grid">
-      @for (_ of [1,2,3,4,5,6]; track _) {
-        <div class="mentor-card">
-          <div class="card-header">
-            <app-skeleton width="56px" height="56px" borderRadius="50%"></app-skeleton>
-            <app-skeleton height="22px" width="72px" borderRadius="4px"></app-skeleton>
-          </div>
-          <div class="mentor-meta" style="display:flex;flex-direction:column;gap:8px">
-            <app-skeleton height="20px" width="70%" borderRadius="4px"></app-skeleton>
-            <app-skeleton height="14px" width="50%" borderRadius="4px"></app-skeleton>
-          </div>
-          <app-skeleton height="14px" width="110px" borderRadius="4px" style="margin:0.75rem 0"></app-skeleton>
-          <app-skeleton height="56px" width="100%" borderRadius="6px" style="margin-bottom:1rem"></app-skeleton>
-          <div class="skill-chips" style="margin-bottom:1rem">
-            @for (_ of [1,2,3]; track _) {
-              <app-skeleton height="26px" width="70px" borderRadius="6px"></app-skeleton>
-            }
-          </div>
-          <div class="card-footer">
-            <app-skeleton height="32px" width="72px" borderRadius="8px"></app-skeleton>
-            <div style="display:flex;gap:0.5rem">
-              <app-skeleton height="36px" width="64px" borderRadius="4px"></app-skeleton>
-              <app-skeleton height="36px" width="64px" borderRadius="4px"></app-skeleton>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-  } @else if (apiError()) {
-    <div class="error-state">
-      <mat-icon>error_outline</mat-icon>
-      <p>{{ apiError() }}</p>
-    </div>
-  } @else if (filteredMentors().length === 0) {
-    <div class="empty-state">
-      <div class="empty-icon-box">
-        <mat-icon>search_off</mat-icon>
+  <div class="mentors-grid">
+    @for (_ of [1,2,3,4,5,6]; track _) {
+    <div class="mentor-card">
+      <div class="card-header">
+        <app-skeleton width="56px" height="56px" borderRadius="50%"></app-skeleton>
+        <app-skeleton height="22px" width="72px" borderRadius="4px"></app-skeleton>
       </div>
-      <h3>No mentors found</h3>
-      <p>Try adjusting your filters or search query.</p>
+      <div class="mentor-meta" style="display:flex;flex-direction:column;gap:8px">
+        <app-skeleton height="20px" width="70%" borderRadius="4px"></app-skeleton>
+        <app-skeleton height="14px" width="50%" borderRadius="4px"></app-skeleton>
+      </div>
+      <app-skeleton height="14px" width="110px" borderRadius="4px" style="margin:0.75rem 0"></app-skeleton>
+      <app-skeleton height="56px" width="100%" borderRadius="6px" style="margin-bottom:1rem"></app-skeleton>
+      <div class="skill-chips" style="margin-bottom:1rem">
+        @for (_ of [1,2,3]; track _) {
+        <app-skeleton height="26px" width="70px" borderRadius="6px"></app-skeleton>
+        }
+      </div>
+      <div class="card-footer">
+        <app-skeleton height="32px" width="72px" borderRadius="8px"></app-skeleton>
+        <div style="display:flex;gap:0.5rem">
+          <app-skeleton height="36px" width="64px" borderRadius="4px"></app-skeleton>
+          <app-skeleton height="36px" width="64px" borderRadius="4px"></app-skeleton>
+        </div>
+      </div>
     </div>
+    }
+  </div>
+  } @else if (apiError()) {
+  <div class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ apiError() }}</p>
+  </div>
+  } @else if (filteredMentors().length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon-box">
+      <mat-icon>search_off</mat-icon>
+    </div>
+    <h3>No mentors found</h3>
+    <p>Try adjusting your filters or search query.</p>
+  </div>
   } @else {
 
-    <!-- ── Mentor Grid ── -->
-    <div class="mentors-grid">
-      @for (m of paginatedMentors(); track m.id) {
-        <div class="mentor-card">
+  <!-- ── Mentor Grid ── -->
+  <div class="mentors-grid">
+    @for (m of filteredMentors(); track m.id) {
+    <div class="mentor-card">
 
-          <!-- Avatar + badge -->
-          <div class="card-header">
-            <div class="mentor-avatar" [style.background]="avatarColor(m)">
-              {{ mentorInitials(m) }}
-            </div>
-            <span class="available-badge">
-              <span class="avail-dot"></span> Available
-            </span>
-          </div>
-
-          <!-- Name + meta -->
-          <div class="mentor-meta">
-            <h3 class="mentor-name">{{ mentorName(m) }}</h3>
-            <div class="mentor-exp">
-              <mat-icon>work_outline</mat-icon>
-              {{ m.experience }} yrs experience
-            </div>
-          </div>
-
-          <!-- Rating -->
-          <div class="mentor-rating">
-            <div class="stars">
-              @for (filled of stars(m.rating); track $index) {
-                <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
-              }
-            </div>
-            <span class="rating-val">{{ m.rating | number:'1.1-1' }}</span>
-            <span class="rating-count">({{ m.reviewCount }})</span>
-          </div>
-
-          <!-- Bio -->
-          <p class="mentor-bio">{{ m.bio || 'Expert mentor ready to help you grow.' }}</p>
-
-          <!-- Skill chips -->
-          <div class="skill-chips">
-            @for (skill of (m.skills | slice:0:4); track skill) {
-              <span class="skill-chip">{{ skill }}</span>
-            }
-            @if (m.skills.length > 4) {
-              <span class="skill-chip skill-chip--more">+{{ m.skills.length - 4 }}</span>
-            }
-          </div>
-
-          <!-- Rate + actions -->
-          <div class="card-footer">
-            <div class="rate-block">
-              <span class="rate-amount">₹{{ m.hourlyRate | number:'1.0-0' }}</span>
-              <span class="rate-label">/hr</span>
-            </div>
-            <div class="card-actions">
-              <button mat-stroked-button class="view-btn" [routerLink]="['/mentor', m.id]">View</button>
-              <button mat-flat-button color="primary" class="book-btn" [routerLink]="['/book-session', m.id]">Book</button>
-            </div>
-          </div>
-
+      <!-- Avatar + badge -->
+      <div class="card-header">
+        @if (userMap().get(m.userId)?.profilePictureUrl) {
+        <img class="mentor-avatar mentor-avatar--img" [src]="userMap().get(m.userId)!.profilePictureUrl!"
+          [alt]="mentorName(m)" />
+        } @else {
+        <div class="mentor-avatar" [style.background]="avatarColor(m)">
+          {{ mentorInitials(m) }}
         </div>
-      }
-    </div>
-
-    <!-- ── Pagination ── -->
-    @if (totalPages() > 1) {
-      <div class="pagination-wrap">
-        <button mat-icon-button class="pagination-btn" [disabled]="currentPage() === 1" (click)="prevPage()" [attr.aria-label]="'Previous page'">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-
-        <div class="pagination-pages">
-          @for (page of []; track $index) {}
-          @for (p of $pagination(totalPages()); track p) {
-            @if (Math.abs(p - currentPage()) <= 2 || p === 1 || p === totalPages()) {
-              <button class="pagination-page-btn" [class.active]="currentPage() === p" (click)="goToPage(p)">{{ p }}</button>
-            } @else if (p === currentPage() - 3 || p === currentPage() + 3) {
-              <span class="pagination-ellipsis">…</span>
-            }
-          }
-        </div>
-
-        <button mat-icon-button class="pagination-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()" [attr.aria-label]="'Next page'">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-
-        <span class="pagination-info">
-          Page <strong>{{ currentPage() }}</strong> of <strong>{{ totalPages() }}</strong>
+        }
+        <span class="available-badge">
+          <span class="avail-dot"></span> Available
         </span>
       </div>
+
+      <!-- Name + meta -->
+      <div class="mentor-meta">
+        <h3 class="mentor-name">{{ mentorName(m) }}</h3>
+        <div class="mentor-exp">
+          <mat-icon>work_outline</mat-icon>
+          {{ m.experience }} yrs experience
+        </div>
+      </div>
+
+      <!-- Rating -->
+      <div class="mentor-rating">
+        <div class="stars">
+          @for (filled of stars(m.rating); track $index) {
+          <mat-icon class="star" [class.star--filled]="filled">star</mat-icon>
+          }
+        </div>
+        <span class="rating-val">{{ m.rating | number:'1.1-1' }}</span>
+        <span class="rating-count">({{ m.reviewCount }})</span>
+      </div>
+
+      <!-- Bio -->
+      <p class="mentor-bio">{{ m.bio || 'Expert mentor ready to help you grow.' }}</p>
+
+      <!-- Skill chips -->
+      <div class="skill-chips">
+        @for (skill of (m.skills | slice:0:4); track skill) {
+        <span class="skill-chip">{{ skill }}</span>
+        }
+        @if (m.skills.length > 4) {
+        <span class="skill-chip skill-chip--more">+{{ m.skills.length - 4 }}</span>
+        }
+      </div>
+
+      <!-- Rate + actions -->
+      <div class="card-footer">
+        <div class="rate-block">
+          <span class="rate-amount">₹{{ m.hourlyRate | number:'1.0-0' }}</span>
+          <span class="rate-label">/hr</span>
+        </div>
+        <div class="card-actions">
+          <button mat-stroked-button class="view-btn" (click)="openView(m)">View</button>
+          <button mat-flat-button color="primary" class="book-btn" [routerLink]="['/book-session', m.id]">Book</button>
+        </div>
+      </div>
+
+    </div>
     }
+  </div>
+
+  <!-- ── Pagination ── -->
+  @if (totalPages() > 1) {
+  <div class="pagination-bar">
+    <span class="pagination-info">
+      Showing {{ rangeStart }}–{{ rangeEnd }} of {{ totalElements() }}
+    </span>
+    <div class="pagination-controls">
+      <button class="page-btn page-btn--nav" [disabled]="currentPage() === 0" (click)="goToPage(currentPage() - 1)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      @for (p of pageNumbers(); track $index) {
+      @if (p === '...') {
+      <span class="page-ellipsis">…</span>
+      } @else {
+      <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ +p + 1
+        }}</button>
+      }
+      }
+      <button class="page-btn page-btn--nav" [disabled]="currentPage() === totalPages() - 1"
+        (click)="goToPage(currentPage() + 1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+  }
 
   }
 
