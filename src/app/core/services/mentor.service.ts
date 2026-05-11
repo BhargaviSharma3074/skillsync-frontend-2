@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface MentorResponse {
+  username: any;
+  name: any;
   id: number;
   userId: number;
   bio: string;
@@ -22,6 +24,7 @@ export interface MentorFilters {
   maxRate?: number;
   minExp?: number;
   sortBy?: string;
+  search?: string;
 }
 
 export interface MentorApplyResponse {
@@ -57,6 +60,7 @@ export class MentorService {
     if (filters?.maxRate) params = params.set('maxRate', filters.maxRate);
     if (filters?.minExp) params = params.set('minExp', filters.minExp);
     if (filters?.sortBy) params = params.set('sortBy', filters.sortBy);
+    if (filters?.search) params = params.set('search', filters.search);
     return this.http.get<Page<MentorResponse>>(`${this.baseUrl}/mentors`, {
       params,
     });

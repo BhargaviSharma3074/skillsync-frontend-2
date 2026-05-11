@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { AdminService } from 'src/app/core/services/admin.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { SkeletonComponent } from 'src/app/shared/skeleton/skeleton.component';
 import { MentorResponse } from 'src/app/core/services/mentor.service';
 
@@ -24,6 +25,7 @@ import { MentorResponse } from 'src/app/core/services/mentor.service';
 })
 export class MentorApprovalsComponent implements OnInit {
   private adminService = inject(AdminService);
+  private authService = inject(AuthService);
 
   mentors = signal<MentorResponse[]>([]);
   loading = signal(true);
@@ -64,6 +66,7 @@ export class MentorApprovalsComponent implements OnInit {
             m.id === mentor.id ? { ...m, status: 'ACTIVE' } : m,
           ),
         );
+        this.authService.fetchProfile().subscribe();
         this.showToast('Mentor approved successfully.');
         this.actionInProgress.set(null);
       },
@@ -83,6 +86,7 @@ export class MentorApprovalsComponent implements OnInit {
             m.id === mentor.id ? { ...m, status: 'REJECTED' } : m,
           ),
         );
+        this.authService.fetchProfile().subscribe();
         this.showToast('Mentor application rejected.');
         this.actionInProgress.set(null);
       },
@@ -114,6 +118,10 @@ export class MentorApprovalsComponent implements OnInit {
       REJECTED: '#fee2e2',
     };
     return map[status] ?? '#f3f4f6';
+  }
+
+  mentorName(mentor: MentorResponse): string {
+    return mentor.name || mentor.username || `Mentor #${mentor.id}`;
   }
 
   avatarColor(id: number): string {

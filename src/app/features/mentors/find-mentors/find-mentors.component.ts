@@ -260,6 +260,7 @@ import {
   OnDestroy,
   OnInit,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -327,9 +328,17 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
   totalElements = signal(0);
   readonly pageSize = 12;
 
+  // For local pagination of search results
+  localCurrentPage = signal(0);
+
   pageNumbers = computed(() => {
-    const total = this.totalPages();
-    const cur = this.currentPage();
+    // Use local pagination when searching, API pagination otherwise
+    const total = this.isSearching()
+      ? this.localTotalPages()
+      : this.totalPages();
+    const cur = this.isSearching()
+      ? this.localCurrentPage()
+      : this.currentPage();
     if (total <= 7) return Array.from({ length: total }, (_, i) => i);
     const pages: (number | '...')[] = [];
     if (cur <= 3) {
@@ -356,14 +365,38 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
   maxRate = signal<number | null>(null);
   searchTerm = signal('');
   filtersOpen = signal(false);
+  allMentorsForSearch = signal<MentorResponse[]>([]);
+  allUserMapForSearch = signal(new Map<number, UserBasic>());
 
-  // Local name/bio/skill search within the current page
+  isSearching = computed(() => !!this.searchTerm().trim());
+
+  localTotalPages = computed(() => {
+    const total = this.filteredMentors().length;
+    const size = this.pageSize;
+    return Math.ceil(total / size);
+  });
+
+  paginatedMentors = computed(() => {
+    const filtered = this.filteredMentors();
+    const start = this.localCurrentPage() * this.pageSize;
+    const end = start + this.pageSize;
+    return filtered.slice(start, end);
+  });
+
+  // Local name/bio/skill search across ALL loaded mentors
   filteredMentors = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
-    if (!term) return this.mentors();
-    return this.mentors().filter((m) => {
+    const mentorsToFilter = this.isSearching()
+      ? this.allMentorsForSearch()
+      : this.mentors();
+    const userMapToUse = this.isSearching()
+      ? this.allUserMapForSearch()
+      : this.userMap();
+
+    if (!term) return mentorsToFilter;
+    return mentorsToFilter.filter((m) => {
       const name = this.userLookup
-        .displayName(this.userMap().get(m.userId))
+        .displayName(userMapToUse.get(m.userId))
         .toLowerCase();
       return (
         name.includes(term) ||
@@ -380,6 +413,15 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
       this.maxRate() ||
       this.filters().sortBy !== 'rating'
     );
+  }
+
+  constructor() {
+    // Watch for search term changes and reload mentors to enable cross-page search
+    effect(() => {
+      this.searchTerm();
+      this.localCurrentPage.set(0);
+      this.loadMentors(0);
+    });
   }
 
   ngOnInit() {
@@ -404,23 +446,43 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
     if (this.minRating()) f.minRating = this.minRating()!;
     if (this.maxRate()) f.maxRate = this.maxRate()!;
 
+    // When searching, load many mentors (up to 500) to enable cross-page search
+    // Otherwise, use pagination with the current page
+    const hasSearch = this.searchTerm().trim();
+    const pageToFetch = hasSearch ? 0 : page;
+    const sizeToFetch = hasSearch ? 500 : this.pageSize;
+
     this.mentorService
-      .getAll(f, page, this.pageSize)
+      .getAll(f, pageToFetch, sizeToFetch)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.mentors.set(data.content);
-          this.currentPage.set(data.number);
-          this.totalPages.set(data.totalPages);
-          this.totalElements.set(data.totalElements);
-          this.loading.set(false);
-          const ids = data.content.map((m) => m.userId);
-          if (ids.length) {
-            this.userLookup
-              .batchFetch(ids)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe((map) => this.userMap.set(map));
+          if (hasSearch) {
+            // When searching, store all mentors for local filtering
+            this.allMentorsForSearch.set(data.content);
+            const ids = data.content.map((m) => m.userId);
+            if (ids.length) {
+              this.userLookup
+                .batchFetch(ids)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((map) => this.allUserMapForSearch.set(map));
+            }
+            this.localCurrentPage.set(0);
+          } else {
+            // When not searching, use regular pagination
+            this.mentors.set(data.content);
+            this.currentPage.set(data.number);
+            this.totalPages.set(data.totalPages);
+            this.totalElements.set(data.totalElements);
+            const ids = data.content.map((m) => m.userId);
+            if (ids.length) {
+              this.userLookup
+                .batchFetch(ids)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((map) => this.userMap.set(map));
+            }
           }
+          this.loading.set(false);
         },
         error: (err) => {
           this.apiError.set(
@@ -433,13 +495,21 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
 
   goToPage(page: number | '...') {
     if (page === '...') return;
-    if (page < 0 || page >= this.totalPages()) return;
-    this.loadMentors(page);
+    if (this.isSearching()) {
+      // Local pagination for search results
+      if (page < 0 || page >= this.localTotalPages()) return;
+      this.localCurrentPage.set(page as number);
+    } else {
+      // API pagination for browsing
+      if (page < 0 || page >= this.totalPages()) return;
+      this.loadMentors(page as number);
+    }
   }
 
   applyFilters() {
     this.filtersOpen.set(false);
     this.currentPage.set(0);
+    this.localCurrentPage.set(0);
     this.loadMentors(0);
   }
 
@@ -451,6 +521,7 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
     this.filters.set({ sortBy: 'rating' });
     this.filtersOpen.set(false);
     this.currentPage.set(0);
+    this.localCurrentPage.set(0);
     this.loadMentors(0);
   }
 
@@ -459,19 +530,30 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
     if (type === 'rating') this.minRating.set(null);
     if (type === 'rate') this.maxRate.set(null);
     this.currentPage.set(0);
+    this.localCurrentPage.set(0);
     this.loadMentors(0);
   }
 
   updateSort(value: string) {
     this.filters.update((f) => ({ ...f, sortBy: value }));
     this.currentPage.set(0);
+    this.localCurrentPage.set(0);
     this.loadMentors(0);
   }
 
   get rangeStart() {
+    if (this.isSearching()) {
+      return this.localCurrentPage() * this.pageSize + 1;
+    }
     return this.currentPage() * this.pageSize + 1;
   }
   get rangeEnd() {
+    if (this.isSearching()) {
+      return Math.min(
+        (this.localCurrentPage() + 1) * this.pageSize,
+        this.filteredMentors().length,
+      );
+    }
     return Math.min(
       (this.currentPage() + 1) * this.pageSize,
       this.totalElements(),
@@ -479,10 +561,13 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
   }
 
   openView(mentor: MentorResponse) {
+    const userMap = this.isSearching()
+      ? this.allUserMapForSearch()
+      : this.userMap();
     this.dialog.open(MentorViewDialogComponent, {
       data: {
         mentor,
-        user: this.userMap().get(mentor.userId),
+        user: userMap.get(mentor.userId),
         avatarColor: this.avatarColor(mentor),
         initials: this.mentorInitials(mentor),
       },
@@ -497,7 +582,10 @@ export class FindMentorsComponent implements OnInit, OnDestroy {
   }
 
   mentorName(mentor: MentorResponse): string {
-    return this.userLookup.displayName(this.userMap().get(mentor.userId));
+    const userMap = this.isSearching()
+      ? this.allUserMapForSearch()
+      : this.userMap();
+    return this.userLookup.displayName(userMap.get(mentor.userId));
   }
 
   mentorInitials(mentor: MentorResponse): string {

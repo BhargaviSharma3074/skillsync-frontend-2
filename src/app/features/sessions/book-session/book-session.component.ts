@@ -234,6 +234,9 @@ export class BookSessionComponent implements OnInit {
   }
 
   // --- Helpers ---
+  mentorName(m: MentorResponse): string {
+    return m.name || m.username || `Mentor #${m.id}`;
+  }
   mentorInitials(m: MentorResponse) {
     return `M${m.id}`.slice(0, 2).toUpperCase();
   }

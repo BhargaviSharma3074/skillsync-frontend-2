@@ -86,8 +86,12 @@
   @if (!loading() && !apiError()) {
   <div class="results-bar">
     <span class="results-count">
-      Showing <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }}
-      @if (hasActiveFilters) { matching your criteria }
+      @if (isSearching()) {
+        Showing <strong>{{ filteredMentors().length }}</strong> mentor{{ filteredMentors().length !== 1 ? 's' : '' }} matching your search
+      } @else {
+        Showing <strong>{{ totalElements() }}</strong> mentor{{ totalElements() !== 1 ? 's' : '' }}
+        @if (hasActiveFilters) { matching your criteria }
+      }
     </span>
     <div class="sort-wrap">
       <mat-icon class="sort-icon">sort</mat-icon>
@@ -148,13 +152,13 @@
 
   <!-- ── Mentor Grid ── -->
   <div class="mentors-grid">
-    @for (m of filteredMentors(); track m.id) {
+    @for (m of paginatedMentors(); track m.id) {
     <div class="mentor-card">
 
       <!-- Avatar + badge -->
       <div class="card-header">
-        @if (userMap().get(m.userId)?.profilePictureUrl) {
-        <img class="mentor-avatar mentor-avatar--img" [src]="userMap().get(m.userId)!.profilePictureUrl!"
+        @if ((isSearching() ? allUserMapForSearch() : userMap()).get(m.userId)?.profilePictureUrl) {
+        <img class="mentor-avatar mentor-avatar--img" [src]="(isSearching() ? allUserMapForSearch() : userMap()).get(m.userId)!.profilePictureUrl!"
           [alt]="mentorName(m)" />
         } @else {
         <div class="mentor-avatar" [style.background]="avatarColor(m)">
@@ -216,27 +220,47 @@
   </div>
 
   <!-- ── Pagination ── -->
-  @if (totalPages() > 1) {
+  @if ((isSearching() ? localTotalPages() : totalPages()) > 1) {
   <div class="pagination-bar">
     <span class="pagination-info">
-      Showing {{ rangeStart }}–{{ rangeEnd }} of {{ totalElements() }}
+      @if (isSearching()) {
+        Showing {{ rangeStart }}–{{ rangeEnd }} of {{ filteredMentors().length }}
+      } @else {
+        Showing {{ rangeStart }}–{{ rangeEnd }} of {{ totalElements() }}
+      }
     </span>
     <div class="pagination-controls">
-      <button class="page-btn page-btn--nav" [disabled]="currentPage() === 0" (click)="goToPage(currentPage() - 1)">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      @for (p of pageNumbers(); track $index) {
-      @if (p === '...') {
-      <span class="page-ellipsis">…</span>
+      @if (isSearching()) {
+        <button class="page-btn page-btn--nav" [disabled]="localCurrentPage() === 0" (click)="goToPage(localCurrentPage() - 1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        @for (p of pageNumbers(); track $index) {
+        @if (p === '...') {
+        <span class="page-ellipsis">…</span>
+        } @else {
+        <button class="page-btn" [class.page-btn--active]="p === localCurrentPage()" (click)="goToPage(p)">{{ +p + 1 }}</button>
+        }
+        }
+        <button class="page-btn page-btn--nav" [disabled]="localCurrentPage() === localTotalPages() - 1"
+          (click)="goToPage(localCurrentPage() + 1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
       } @else {
-      <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ +p + 1
-        }}</button>
+        <button class="page-btn page-btn--nav" [disabled]="currentPage() === 0" (click)="goToPage(currentPage() - 1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        @for (p of pageNumbers(); track $index) {
+        @if (p === '...') {
+        <span class="page-ellipsis">…</span>
+        } @else {
+        <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ +p + 1 }}</button>
+        }
+        }
+        <button class="page-btn page-btn--nav" [disabled]="currentPage() === totalPages() - 1"
+          (click)="goToPage(currentPage() + 1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
       }
-      }
-      <button class="page-btn page-btn--nav" [disabled]="currentPage() === totalPages() - 1"
-        (click)="goToPage(currentPage() + 1)">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
     </div>
   </div>
   }
